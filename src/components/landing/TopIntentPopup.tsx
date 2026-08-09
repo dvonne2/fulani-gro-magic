@@ -152,7 +152,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                   type="button"
                   onClick={goToOrderForm}
                   data-form-cta="true"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gold text-black font-cinzel text-sm tracking-widest uppercase py-3 font-bold hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-gold/70"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gold text-black font-cinzel text-sm tracking-widest uppercase py-3 font-bold hover:scale-[1.02] transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-gold/70"
                 >
                   ORDER NOW  PAY ON DELIVERY
                 </button>

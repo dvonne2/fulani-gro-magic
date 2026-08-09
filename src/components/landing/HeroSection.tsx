@@ -152,7 +152,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             <a
               href="#order-form"
               data-form-cta="true"
-              className="block w-full bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-base md:text-lg tracking-widest uppercase py-4 md:py-5 rounded-xl font-bold text-center mb-6 hover:transform hover:-translate-y-2 hover:shadow-lg transition-all duration-300 cta-with-arrow"
+              className="block w-full bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-base md:text-lg tracking-widest uppercase py-4 md:py-5 rounded-xl font-bold text-center mb-6 shadow-lg hover:-translate-y-1 hover:scale-[1.02] transition-transform duration-300 cta-with-arrow"
             >
               Claim My Special Offer
               <span className="arrow-indicator"></span>

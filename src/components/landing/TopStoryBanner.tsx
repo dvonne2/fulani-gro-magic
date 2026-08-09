@@ -81,8 +81,8 @@ export const TopStoryBanner = () => {
 
       <div className="mx-auto text-center">
         {/* Bundle Image */}
-        <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl">
-          <picture>
+        <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl aspect-[1055/1491] bg-gray-50">
+          <picture className="block w-full h-full">
             <source
               media="(max-width: 767px)"
               srcSet={`${BASE_PATH}assets/newhero-665.webp`}
@@ -91,7 +91,7 @@ export const TopStoryBanner = () => {
             <img
               src={`${BASE_PATH}assets/newhero.webp`}
               alt="Product Bundle"
-              className="w-full h-auto object-contain"
+              className="w-full h-full object-contain"
               loading="eager"
               fetchpriority="high"
               decoding="async"
@@ -166,7 +166,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -176,7 +176,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -186,7 +186,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -633,7 +633,7 @@ export const TopStoryBanner = () => {
               <DialogTrigger asChild>
                 <button
                   data-review-trigger
-                  className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+                  className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform"
                 >
                   Write A Review
                 </button>
@@ -1647,7 +1647,7 @@ This thing is not hype.
                 orderForm.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg"
+            className="bg-green-600 text-white font-bold py-4 px-8 rounded-lg transition-transform duration-300 hover:scale-105 shadow-lg text-lg"
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontWeight: '600',

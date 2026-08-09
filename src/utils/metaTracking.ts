@@ -287,8 +287,8 @@ export function captureFbclid(): void {
       fetch('/api/set-attribution', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fbc: fbc || undefined, fbp: fbp || undefined }),
         keepalive: true,
+        body: JSON.stringify({ fbc: fbc || undefined, fbp: fbp || undefined }),
       }).catch(() => {
         sessionStorage.removeItem('fhg_attribution_synced');
       });
@@ -495,6 +495,7 @@ async function fireCAPIEvent(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      keepalive: true,
     });
     if (!res.ok) {
       throw new Error(`CAPI request failed: HTTP ${res.status}`);
@@ -768,6 +769,7 @@ export async function firePageViewCAPI(): Promise<void> {
     const res = await fetch(CAPI_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
       body: JSON.stringify({
         event_name: 'PageView',
         event_id: eventId,

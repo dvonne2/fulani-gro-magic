@@ -22,7 +22,7 @@ export const Footer = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="relative inline-flex items-center justify-center gap-2 text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group cta-with-arrow footer-cta-button"
+            className="relative inline-flex items-center justify-center gap-2 text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-transform duration-300 overflow-hidden group cta-with-arrow footer-cta-button"
           >
             <span className="relative z-10">ORDER NOW PAY ON DELIVERY</span>
             <span className="arrow-indicator"></span>
@@ -53,12 +53,8 @@ export const Footer = () => {
             animation: bling-pulse 2s ease-in-out infinite;
             background: linear-gradient(90deg, #5ec239 0%, #4cae4e 50%, #5ec239 100%);
             background-size: 200% 100%;
-            background-position: right center;
-            transition: background-position 0.3s ease;
-          }
-          
-          .footer-cta-button:hover {
-            background-position: left center;
+            background-position: center center;
+            transition: transform 0.3s ease;
           }
           
           .footer-shine-effect {

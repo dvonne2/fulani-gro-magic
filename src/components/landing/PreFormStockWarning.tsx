@@ -13,7 +13,7 @@ export const PreFormStockWarning: React.FC = () => {
         <a
           href="#order-form"
           data-form-cta="true"
-          className="inline-block bg-[#1a1a1a] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-lg hover:bg-black transition-colors"
+          className="inline-block bg-[#1a1a1a] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
         >
           Claim Yours Before It&apos;s Gone
         </a>
