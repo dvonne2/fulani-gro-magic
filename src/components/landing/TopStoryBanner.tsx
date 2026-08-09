@@ -82,7 +82,7 @@ export const TopStoryBanner = () => {
       <div className="mx-auto text-center">
         {/* Bundle Image */}
         <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl aspect-[1055/1491] bg-gray-50">
-          <picture className="block w-full h-full">
+          <picture className="block w-full">
             <source
               media="(max-width: 767px)"
               srcSet={`${BASE_PATH}assets/newhero-665.webp`}
@@ -91,7 +91,7 @@ export const TopStoryBanner = () => {
             <img
               src={`${BASE_PATH}assets/newhero.webp`}
               alt="Product Bundle"
-              className="w-full h-full object-contain"
+              className="w-full h-auto object-contain"
               loading="eager"
               fetchpriority="high"
               decoding="async"
