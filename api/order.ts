@@ -124,6 +124,18 @@ async function sendMetaPurchase(
   );
   metaUrl.searchParams.set('access_token', config.accessToken);
 
+  console.log('[CAPI Purchase] sending event:', {
+    event_name: event.event_name,
+    event_id: event.event_id,
+    value: total,
+    currency: 'NGN',
+    order_id: orderId,
+    content_name: packageName,
+    content_ids: [sku],
+    quantity,
+    productAmount,
+  });
+
   try {
     const metaRes = await fetch(metaUrl.toString(), {
       method: 'POST',
