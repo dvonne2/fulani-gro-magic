@@ -66,6 +66,9 @@ interface CAPIResult {
   ok: boolean;
   status?: number;
   meta?: any;
+  eventId?: string;
+  value?: number;
+  currency?: string;
 }
 
 async function sendMetaPurchase(
@@ -149,14 +152,14 @@ async function sendMetaPurchase(
 
     if (!metaRes.ok) {
       console.error('[CAPI Purchase] Meta error:', metaRes.status, metaBody);
-      return { ok: false, status: metaRes.status, meta: metaBody };
+      return { ok: false, status: metaRes.status, meta: metaBody, eventId: orderId, value: total, currency: 'NGN' };
     }
 
     console.log('[CAPI Purchase] Meta accepted for order:', orderId, metaBody);
-    return { ok: true, status: metaRes.status, meta: metaBody };
+    return { ok: true, status: metaRes.status, meta: metaBody, eventId: orderId, value: total, currency: 'NGN' };
   } catch (err) {
     console.error('[CAPI Purchase] Request failed:', err);
-    return { ok: false };
+    return { ok: false, eventId: orderId, value: total, currency: 'NGN' };
   }
 }
 
@@ -203,8 +206,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ ok: false, error: 'SHEET_ID not set' });
   }
 
+  let appendedRow = '';
   try {
-    await sheets.spreadsheets.values.append({
+    const appendRes = await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: SHEET_RANGE,
       valueInputOption: 'USER_ENTERED',
@@ -228,6 +232,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ]],
       },
     });
+    appendedRow = appendRes.data.updates?.updatedRange || '';
     if (checkoutAttemptId) {
       recentOrderIds.set(checkoutAttemptId, orderId);
       if (recentOrderIds.size > MAX_RECENT_CACHE) {
@@ -237,6 +242,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const capiResult = await sendMetaPurchase(orderId, body, req);
+
+    if (appendedRow) {
+      try {
+        const m = appendedRow.match(/!.*?([A-Z]+)(\d+):/);
+        const row = m ? m[2] : '';
+        if (row) {
+          const messages = Array.isArray(capiResult.meta?.messages)
+            ? JSON.stringify(capiResult.meta.messages)
+            : '';
+          await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `Orders!P${row}:V${row}`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: {
+              values: [[
+                orderId,
+                capiResult.eventId || orderId,
+                capiResult.value ?? '',
+                capiResult.currency || '',
+                capiResult.meta?.events_received ?? '',
+                messages,
+                capiResult.meta?.fbtrace_id || '',
+              ]],
+            },
+          });
+        }
+      } catch (logErr) {
+        console.error('[CAPI Purchase] Could not log to sheet:', logErr);
+      }
+    }
+
     return res.status(200).json({
       ok: true,
       orderId,
