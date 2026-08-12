@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useAfterHeroLoad, useIdleLoad } from '@/hooks/useIdleLoad';
+import { fireViewContent } from '@/utils/metaTracking';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { StickyElements } from '@/components/landing/StickyElements';
@@ -136,10 +137,7 @@ const Index = () => {
     // trackPageView(); // Tracking removed
     // CRITICAL FIX: Dynamic ViewContent for whale hunting - capture high-value packages
     setTimeout(() => {
-      // Check URL for package selection, default to baseline
-      const urlParams = new URLSearchParams(window.location.search);
-      const pkg = urlParams.get('pkg') || 'Fulani Hair Gro';
-      // trackViewContent(pkg); // Dynamic pricing for whale hunting - Tracking removed
+      fireViewContent({ packageName: 'Fulani Hair Gro', amount: 66750 });
     }, 1000); // Fire after 1 second
     hasTrackedPageView.current = true;
   }, []);
