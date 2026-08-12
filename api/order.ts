@@ -62,15 +62,21 @@ function normalizePhoneDigits(phone: string | undefined): string {
   return digits;
 }
 
+interface CAPIResult {
+  ok: boolean;
+  status?: number;
+  meta?: any;
+}
+
 async function sendMetaPurchase(
   orderId: string,
   body: Record<string, any>,
   req: VercelRequest
-): Promise<boolean> {
+): Promise<CAPIResult> {
   const config = getMetaConfig();
   if (!config.pixelId || !config.accessToken || !config.apiVersion) {
     console.error('[CAPI Purchase] Meta not configured, skipping CAPI Purchase');
-    return false;
+    return { ok: false, status: 500, meta: { error: 'Meta not configured' } };
   }
 
   const fullName = String(body.name || '').trim();
@@ -126,18 +132,19 @@ async function sendMetaPurchase(
     });
 
     const text = await metaRes.text();
+    let metaBody: any = null;
+    try { metaBody = JSON.parse(text); } catch {}
+
     if (!metaRes.ok) {
-      let metaBody: any;
-      try { metaBody = JSON.parse(text); } catch {}
       console.error('[CAPI Purchase] Meta error:', metaRes.status, metaBody);
-      return false;
+      return { ok: false, status: metaRes.status, meta: metaBody };
     }
 
-    console.log('[CAPI Purchase] Meta accepted for order:', orderId);
-    return true;
+    console.log('[CAPI Purchase] Meta accepted for order:', orderId, metaBody);
+    return { ok: true, status: metaRes.status, meta: metaBody };
   } catch (err) {
     console.error('[CAPI Purchase] Request failed:', err);
-    return false;
+    return { ok: false };
   }
 }
 
@@ -217,8 +224,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    const capiOk = await sendMetaPurchase(orderId, body, req);
-    return res.status(200).json({ ok: true, orderId, capi: capiOk });
+    const capiResult = await sendMetaPurchase(orderId, body, req);
+    return res.status(200).json({
+      ok: true,
+      orderId,
+      capi: capiResult.ok,
+      capiDetails: {
+        status: capiResult.status,
+        events_received: capiResult.meta?.events_received,
+        fbtrace_id: capiResult.meta?.fbtrace_id,
+        messages: capiResult.meta?.messages,
+      },
+    });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;
