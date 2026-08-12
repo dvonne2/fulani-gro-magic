@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 
 function generateServerOrderId(): string {
   const ts = Date.now().toString(36).toUpperCase();
@@ -21,6 +21,125 @@ function getSheets() {
 }
 
 const SHEET_RANGE = 'Orders!A:O';
+
+// Meta CAPI config (must be set in Vercel project environment)
+function getMetaConfig() {
+  return {
+    pixelId: process.env.META_PIXEL_ID?.trim() || '',
+    accessToken: process.env.META_ACCESS_TOKEN?.trim() || '',
+    apiVersion: process.env.META_API_VERSION?.trim() || '',
+  };
+}
+
+function firstForwardedIp(value: string | string[] | undefined): string {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (!raw) return '';
+  return raw
+    .split(',')
+    .map((part) => part.trim())
+    .find(Boolean) || '';
+}
+
+function getClientIp(req: VercelRequest): string {
+  return (
+    firstForwardedIp(req.headers['x-vercel-forwarded-for']) ||
+    firstForwardedIp(req.headers['x-real-ip']) ||
+    firstForwardedIp(req.headers['x-forwarded-for']) ||
+    req.socket?.remoteAddress ||
+    ''
+  );
+}
+
+function sha256Hex(value: string): string {
+  return createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
+}
+
+function normalizePhoneDigits(phone: string | undefined): string {
+  if (!phone) return '';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.startsWith('0')) return '234' + digits.slice(1);
+  if (!digits.startsWith('234')) return '234' + digits;
+  return digits;
+}
+
+async function sendMetaPurchase(
+  orderId: string,
+  body: Record<string, any>,
+  req: VercelRequest
+): Promise<boolean> {
+  const config = getMetaConfig();
+  if (!config.pixelId || !config.accessToken || !config.apiVersion) {
+    console.error('[CAPI Purchase] Meta not configured, skipping CAPI Purchase');
+    return false;
+  }
+
+  const fullName = String(body.name || '').trim();
+  const nameParts = fullName.split(/\s+/);
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  const userData: Record<string, any> = {};
+  if (firstName) userData.fn = sha256Hex(firstName);
+  if (lastName) userData.ln = sha256Hex(lastName);
+  if (body.email) userData.em = sha256Hex(String(body.email));
+  if (body.phone) userData.ph = sha256Hex(normalizePhoneDigits(String(body.phone)));
+  if (body.state) userData.st = sha256Hex(String(body.state));
+  userData.country = 'ng';
+  userData.client_ip_address = getClientIp(req);
+  userData.client_user_agent = (Array.isArray(req.headers['user-agent']) ? req.headers['user-agent'][0] : req.headers['user-agent']) || '';
+
+  const packageName = String(body.package || 'Fulani Hair Gro');
+  const sku = String(body.sku || packageName);
+  const quantity = Number(body.quantity) || 1;
+  const productAmount = Number(body.productAmount) || 0;
+  const total = Number(body.amount) || 0;
+
+  const event = {
+    event_name: 'Purchase',
+    event_id: orderId,
+    event_time: Math.floor(Date.now() / 1000),
+    action_source: 'website',
+    event_source_url: (Array.isArray(req.headers.referer) ? req.headers.referer[0] : req.headers.referer) || 'https://fulanihairsecrets.com/',
+    user_data: userData,
+    custom_data: {
+      value: total,
+      currency: 'NGN',
+      order_id: orderId,
+      content_type: 'product',
+      content_name: packageName,
+      content_ids: [sku],
+      contents: [{ id: sku, quantity, item_price: productAmount }],
+      num_items: quantity,
+    },
+  };
+
+  const metaUrl = new URL(
+    `https://graph.facebook.com/${config.apiVersion}/${config.pixelId}/events`
+  );
+  metaUrl.searchParams.set('access_token', config.accessToken);
+
+  try {
+    const metaRes = await fetch(metaUrl.toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: [event] }),
+    });
+
+    const text = await metaRes.text();
+    if (!metaRes.ok) {
+      let metaBody: any;
+      try { metaBody = JSON.parse(text); } catch {}
+      console.error('[CAPI Purchase] Meta error:', metaRes.status, metaBody);
+      return false;
+    }
+
+    console.log('[CAPI Purchase] Meta accepted for order:', orderId);
+    return true;
+  } catch (err) {
+    console.error('[CAPI Purchase] Request failed:', err);
+    return false;
+  }
+}
 
 // In-memory idempotency cache for the lifetime of this serverless container.
 // It prevents the same checkout attempt from being written twice if the
@@ -97,7 +216,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (first !== undefined) recentOrderIds.delete(first);
       }
     }
-    return res.status(200).json({ ok: true, orderId });
+
+    const capiOk = await sendMetaPurchase(orderId, body, req);
+    return res.status(200).json({ ok: true, orderId, capi: capiOk });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;
