@@ -4,14 +4,16 @@ import { google } from 'googleapis';
 const SHEET_RANGE = 'Orders!A:O';
 
 function getAuth() {
-  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim() || '';
-  const key = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
   if (!email || !key) {
     throw new Error('Google service account not configured');
   }
-  return new google.auth.JWT(email, undefined, key, [
-    'https://www.googleapis.com/auth/spreadsheets',
-  ]);
+  return new google.auth.JWT({
+    email,
+    key,
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
