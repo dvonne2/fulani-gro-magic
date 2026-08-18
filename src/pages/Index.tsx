@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useAfterHeroLoad, useIdleLoad } from '@/hooks/useIdleLoad';
+import { StickyPayOnDeliveryBar } from '@/components/landing/StickyPayOnDeliveryBar';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { StickyElements } from '@/components/landing/StickyElements';
@@ -285,7 +286,10 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <>
+      <StickyPayOnDeliveryBar />
+      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      
       {/* Footer sticky bar temporarily hidden */}
       {false && mounted && afterHero && (
         <StickyElements 
@@ -320,6 +324,7 @@ const Index = () => {
         onClose={() => setShowTopIntent(false)}
       />
     </div>
+    </>
   );
 };
 
