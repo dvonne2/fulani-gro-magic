@@ -319,20 +319,6 @@ const Index = () => {
         show={showTopIntent}
         onClose={() => setShowTopIntent(false)}
       />
-
-      <a
-        href="https://wa.me/2348101594734?text=Hi%2C%20I%20need%20help%20with%20my%20order"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-white font-sans text-sm font-bold shadow-lg hover:scale-105 transition-transform md:bottom-6 md:right-6 md:px-5 md:py-3 md:text-base"
-        aria-label="Message us on WhatsApp"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M17.6 6.32A7.85 7.85 0 0 0 12 4a7.94 7.94 0 0 0-7.93 7.93c0 1.4.37 2.76 1.06 3.97l-1.13 4.13 4.23-1.1A7.93 7.93 0 0 0 20 11.93a7.85 7.85 0 0 0-2.4-5.61zm-5.6 12.23a6.56 6.56 0 0 1-3.34-.92l-.24-.14-2.5.65.67-2.43-.16-.26a6.57 6.57 0 0 1 5.57-10.02 6.57 6.57 0 0 1 6.57 6.57 6.57 6.57 0 0 1-5.57 6.55z"/>
-          <path d="M14.25 13.18c-.2-.11-1.18-.58-1.36-.65-.18-.06-.32-.09-.45.09-.13.18-.5.65-.61.78-.11.13-.23.15-.42.05-.2-.11-.82-.3-1.56-.96a5.85 5.85 0 0 1-1.08-1.34c-.11-.2 0-.3.08-.4.09-.09.2-.23.3-.35.1-.11.13-.18.2-.3.06-.11.03-.21-.02-.3-.05-.08-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.35l-.38-.01c-.13 0-.35.05-.53.24-.18.2-.69.67-.69 1.64 0 .96.7 1.9.8 2.03.1.13 1.38 2.11 3.35 2.96.47.2.83.32 1.12.41.47.15.9.13 1.23.08.38-.06 1.18-.48 1.35-.95.16-.46.16-.86.11-.95-.04-.08-.15-.13-.35-.24z"/>
-        </svg>
-        Click Here To Order On Whatsapp
-      </a>
     </div>
   );
 };
