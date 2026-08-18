@@ -14,9 +14,7 @@ const copyCriticalFiles = () => ({
       '.htaccess',
       'favicon.ico',
       'robots.txt',
-      'analytics-deferred.js',
-      'proxy/facebook.php',
-      'meta-capi.php'
+      'analytics-deferred.js'
     ];
 
     criticalFiles.forEach(file => {
@@ -57,6 +55,9 @@ const makeCssAsync = () => ({
 
 export default defineConfig({
   base: '/',
+  define: {
+    __META_PIXEL_ID__: JSON.stringify(process.env.META_PIXEL_ID || ''),
+  },
   server: {
     proxy: {
       '/api': {

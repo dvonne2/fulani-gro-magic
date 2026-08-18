@@ -29,7 +29,9 @@ const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
-import { BundleSelector } from './BundleSelector';
+const BundleSelector = lazy(() =>
+  import('./BundleSelector').then((m) => ({ default: m.BundleSelector }))
+);
 import { PreFormStockWarning } from './PreFormStockWarning';
 
 export const TopStoryBanner = () => {
@@ -728,7 +730,13 @@ export const TopStoryBanner = () => {
                 </div>
               </div>
 
-              <BundleSelector />
+              {afterHero ? (
+                <Suspense fallback={<div className="min-h-[200px]" />}>
+                  <BundleSelector />
+                </Suspense>
+              ) : (
+                <div className="min-h-[200px]" />
+              )}
               
               <PreFormStockWarning />
               

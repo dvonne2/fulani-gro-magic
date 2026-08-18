@@ -11,31 +11,11 @@ import result6 from '@/assets-optimized/results/result-6.webp';
 import result7 from '@/assets-optimized/results/result-7.webp';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { usePrefetch } from '@/hooks/usePrefetch';
-import { fireViewContent } from '@/utils/metaTracking';
 import { useEffect, useRef } from 'react';
 
 export const BundleSection = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let fired = false;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !fired) {
-          fired = true;
-          fireViewContent({ packageName: 'Complete 3-Step Bundle', amount: 66750 });
-        }
-      });
-    }, { threshold: 0.3 });
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   const results = [
     { image: result1, caption: "Length retention goals" },

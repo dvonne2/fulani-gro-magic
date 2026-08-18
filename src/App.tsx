@@ -5,7 +5,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
 import Index from "./pages/Index";
-import { firePageViewCAPI, captureFbclid } from "@/utils/metaTracking";
+import { meta } from "@/utils/metaTracking";
 
 // Valentine promo ended - components hidden
 // import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
@@ -30,24 +30,9 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Generate a shared PageView event ID if analytics-deferred.js has not run yet.
-    // analytics-deferred.js will use the same ID so browser and CAPI PageView dedup.
-    if (!window.__pvEventId) {
-      window.__pvEventId = Math.random().toString(36).slice(2, 18);
-    }
-    const runAfterPaint = () => {
-      // Defer attribution persistence and CAPI call until after React hydration/FCP.
-      setTimeout(() => {
-        captureFbclid();   // persist _fbc cookie / fbclid so it survives to /thank-you
-        firePageViewCAPI();
-      }, 0);
-    };
-    if (typeof requestAnimationFrame === 'function') {
-      requestAnimationFrame(runAfterPaint);
-    } else {
-      runAfterPaint();
-    }
+    meta.firePageView().catch((err) => console.error('[App] firePageView failed:', err));
   }, []);
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

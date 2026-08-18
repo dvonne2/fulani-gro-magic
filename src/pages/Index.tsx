@@ -1,7 +1,6 @@
 import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useAfterHeroLoad, useIdleLoad } from '@/hooks/useIdleLoad';
-import { fireViewContent } from '@/utils/metaTracking';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { StickyElements } from '@/components/landing/StickyElements';
@@ -104,9 +103,6 @@ const Index = () => {
   const loadNonCritical = useIdleLoad(500); // Load after 500ms idle
   const afterHero = useAfterHeroLoad();
 
-  // const { trackPageView, trackViewContent, trackFormStart } = useMetaPixel(); // Tracking removed
-  const hasTrackedPageView = useRef(false);
-  
   // State management
   const [stockCount, setStockCount] = useState(43);
   const [viewerCount, setViewerCount] = useState(427);
@@ -130,17 +126,6 @@ const Index = () => {
 
     return () => clearInterval(timer);
   }, [afterHero]);
-
-  // Meta Pixel: PageView and ViewContent on mount
-  useEffect(() => {
-    if (hasTrackedPageView.current) return;
-    // trackPageView(); // Tracking removed
-    // CRITICAL FIX: Dynamic ViewContent for whale hunting - capture high-value packages
-    setTimeout(() => {
-      fireViewContent({ packageName: 'Fulani Hair Gro', amount: 66750 });
-    }, 1000); // Fire after 1 second
-    hasTrackedPageView.current = true;
-  }, []);
 
   // Viewer count fluctuation (social proof)
   useEffect(() => {

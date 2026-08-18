@@ -27,10 +27,14 @@ pnpm-lock.yaml
 
 # Environment files
 .env
+.env.backup-before-vitalvida-meta
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Vercel project metadata
+.vercel
 
 # Editor directories and files
 .vscode/*

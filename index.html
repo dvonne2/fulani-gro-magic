@@ -26,7 +26,6 @@
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
 
     <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/cinzel-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Critical above-the-fold CSS (urgency banner + hero) -->
     <style>
@@ -174,33 +173,18 @@
       @media(min-width:1024px){.lg\:text-6xl{font-size:3.75rem}}
     </style>
 
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-    <link rel="dns-prefetch" href="https://connect.facebook.net">
-    <link rel="preconnect" href="https://graph.facebook.com" crossorigin>
-    <link rel="dns-prefetch" href="https://graph.facebook.com">
-    <link rel="preconnect" href="https://analytics.tiktok.com" crossorigin>
     <link rel="dns-prefetch" href="https://analytics.tiktok.com">
+    <link rel="preconnect" href="https://k6-e4e4123be8e54363900a90353991ca93.ecs.us-west-1.on.aws" crossorigin>
 
     <link rel="preload" href="/responsive-fix.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/responsive-fix.css"></noscript>
 
-  </head>
+  
+</head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-
-    <!-- Facebook Pixel Stub - queues events before analytics-deferred.js loads -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    </script>
 
     <!-- TikTok Pixel Stub - queues events before analytics-deferred.js loads -->
     <script>
@@ -209,6 +193,20 @@
       }(window, document, 'ttq');
     </script>
 
-    <script src="/analytics-deferred.js" defer></script>
+    <script>
+      (function () {
+        function loadAnalytics() {
+          var s = document.createElement('script');
+          s.src = '/analytics-deferred.js';
+          s.async = true;
+          document.body.appendChild(s);
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadAnalytics);
+        } else {
+          loadAnalytics();
+        }
+      })();
+    </script>
   </body>
 </html>

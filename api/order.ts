@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { randomBytes, createHash } from 'crypto';
+import { randomBytes } from 'crypto';
+import { metaCapi } from './lib/metaCapi.js';
 
 function generateServerOrderId(): string {
   const ts = Date.now().toString(36).toUpperCase();
@@ -22,144 +23,46 @@ function getSheets() {
 
 const SHEET_RANGE = 'Orders!A:O';
 
-// Meta CAPI config (must be set in Vercel project environment)
-function getMetaConfig() {
-  return {
-    pixelId: process.env.META_PIXEL_ID?.trim() || '',
-    accessToken: process.env.META_ACCESS_TOKEN?.trim() || '',
-    apiVersion: process.env.META_API_VERSION?.trim() || '',
-  };
-}
-
-function firstForwardedIp(value: string | string[] | undefined): string {
-  const raw = Array.isArray(value) ? value[0] : value;
-  if (!raw) return '';
-  return raw
-    .split(',')
-    .map((part) => part.trim())
-    .find(Boolean) || '';
-}
-
-function getClientIp(req: VercelRequest): string {
-  return (
-    firstForwardedIp(req.headers['x-vercel-forwarded-for']) ||
-    firstForwardedIp(req.headers['x-real-ip']) ||
-    firstForwardedIp(req.headers['x-forwarded-for']) ||
-    req.socket?.remoteAddress ||
-    ''
-  );
-}
-
-function sha256Hex(value: string): string {
-  return createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
-}
-
-function normalizePhoneDigits(phone: string | undefined): string {
-  if (!phone) return '';
-  const digits = phone.replace(/\D/g, '');
-  if (digits.startsWith('0')) return '234' + digits.slice(1);
-  if (!digits.startsWith('234')) return '234' + digits;
-  return digits;
-}
-
-interface CAPIResult {
-  ok: boolean;
-  status?: number;
-  meta?: any;
-  eventId?: string;
-  value?: number;
-  currency?: string;
-}
-
 async function sendMetaPurchase(
   orderId: string,
   body: Record<string, any>,
-  req: VercelRequest
-): Promise<CAPIResult> {
-  const config = getMetaConfig();
-  if (!config.pixelId || !config.accessToken || !config.apiVersion) {
-    console.error('[CAPI Purchase] Meta not configured, skipping CAPI Purchase');
-    return { ok: false, status: 500, meta: { error: 'Meta not configured' } };
-  }
-
-  const fullName = String(body.name || '').trim();
-  const nameParts = fullName.split(/\s+/);
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
-
-  const userData: Record<string, any> = {};
-  if (firstName) userData.fn = sha256Hex(firstName);
-  if (lastName) userData.ln = sha256Hex(lastName);
-  if (body.email) userData.em = sha256Hex(String(body.email));
-  if (body.phone) userData.ph = sha256Hex(normalizePhoneDigits(String(body.phone)));
-  if (body.state) userData.st = sha256Hex(String(body.state));
-  userData.country = 'ng';
-  userData.client_ip_address = getClientIp(req);
-  userData.client_user_agent = (Array.isArray(req.headers['user-agent']) ? req.headers['user-agent'][0] : req.headers['user-agent']) || '';
-
-  const packageName = String(body.package || 'Fulani Hair Gro');
-  const sku = String(body.sku || packageName);
-  const quantity = Number(body.quantity) || 1;
-  const productAmount = Number(body.productAmount) || 0;
-  const total = Number(body.amount) || 0;
-
-  const event = {
-    event_name: 'Purchase',
-    event_id: orderId,
-    event_time: Math.floor(Date.now() / 1000),
-    action_source: 'website',
-    event_source_url: (Array.isArray(req.headers.referer) ? req.headers.referer[0] : req.headers.referer) || 'https://fulanihairsecrets.com/',
-    user_data: userData,
-    custom_data: {
-      value: total,
-      currency: 'NGN',
-      order_id: orderId,
-      content_type: 'product',
-      content_name: packageName,
-      content_ids: [sku],
-      contents: [{ id: sku, quantity, item_price: productAmount }],
-      num_items: quantity,
-    },
-  };
-
-  const metaUrl = new URL(
-    `https://graph.facebook.com/${config.apiVersion}/${config.pixelId}/events`
-  );
-  metaUrl.searchParams.set('access_token', config.accessToken);
-
-  console.log('[CAPI Purchase] sending event:', {
-    event_name: event.event_name,
-    event_id: event.event_id,
-    value: total,
+  headers: VercelRequest['headers']
+): Promise<void> {
+  if (!metaCapi) return;
+  const customData: Record<string, any> = {
+    value: Number(body.amount),
     currency: 'NGN',
     order_id: orderId,
-    content_name: packageName,
-    content_ids: [sku],
-    quantity,
-    productAmount,
-  });
+    content_name: body.package,
+    content_type: 'product',
+  };
+  if (body.sku) customData.content_ids = [String(body.sku)];
+  if (typeof body.quantity === 'number') customData.num_items = body.quantity;
+
+  const payload = {
+    event_name: 'Purchase' as const,
+    event_id: orderId,
+    event_time: Math.floor(Date.now() / 1000),
+    action_source: 'website' as const,
+    event_source_url: typeof body.landing_page_url === 'string' ? body.landing_page_url : '',
+    user_data: {
+      external_id: String(body.metaExternalId || ''),
+      name: body.name,
+      phone: body.phone,
+      email: body.email || '',
+      state: body.state,
+      city: body.city || '',
+      country: 'ng',
+      fbp: body.fbp || undefined,
+      fbc: body.fbc || undefined,
+    },
+    custom_data: customData,
+  };
 
   try {
-    const metaRes = await fetch(metaUrl.toString(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [event] }),
-    });
-
-    const text = await metaRes.text();
-    let metaBody: any = null;
-    try { metaBody = JSON.parse(text); } catch {}
-
-    if (!metaRes.ok) {
-      console.error('[CAPI Purchase] Meta error:', metaRes.status, metaBody);
-      return { ok: false, status: metaRes.status, meta: metaBody, eventId: orderId, value: total, currency: 'NGN' };
-    }
-
-    console.log('[CAPI Purchase] Meta accepted for order:', orderId, metaBody);
-    return { ok: true, status: metaRes.status, meta: metaBody, eventId: orderId, value: total, currency: 'NGN' };
+    await metaCapi.sendPurchase({ body: payload, headers });
   } catch (err) {
-    console.error('[CAPI Purchase] Request failed:', err);
-    return { ok: false, eventId: orderId, value: total, currency: 'NGN' };
+    console.error('[Meta Purchase] failed:', err);
   }
 }
 
@@ -241,48 +144,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    const capiResult = await sendMetaPurchase(orderId, body, req);
-
-    if (appendedRow) {
-      try {
-        const m = appendedRow.match(/!.*?([A-Z]+)(\d+):/);
-        const row = m ? m[2] : '';
-        if (row) {
-          const messages = Array.isArray(capiResult.meta?.messages)
-            ? JSON.stringify(capiResult.meta.messages)
-            : '';
-          await sheets.spreadsheets.values.update({
-            spreadsheetId,
-            range: `Orders!P${row}:V${row}`,
-            valueInputOption: 'USER_ENTERED',
-            requestBody: {
-              values: [[
-                orderId,
-                capiResult.eventId || orderId,
-                capiResult.value ?? '',
-                capiResult.currency || '',
-                capiResult.meta?.events_received ?? '',
-                messages,
-                capiResult.meta?.fbtrace_id || '',
-              ]],
-            },
-          });
-        }
-      } catch (logErr) {
-        console.error('[CAPI Purchase] Could not log to sheet:', logErr);
-      }
-    }
+    // Fire server-side Meta Purchase only after the order is recorded in Sheets.
+    await sendMetaPurchase(orderId, body, req.headers);
 
     return res.status(200).json({
       ok: true,
       orderId,
-      capi: capiResult.ok,
-      capiDetails: {
-        status: capiResult.status,
-        events_received: capiResult.meta?.events_received,
-        fbtrace_id: capiResult.meta?.fbtrace_id,
-        messages: capiResult.meta?.messages,
-      },
     });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';

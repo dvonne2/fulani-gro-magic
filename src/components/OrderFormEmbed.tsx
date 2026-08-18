@@ -1,8 +1,8 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
-import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
+import { meta } from '@/utils/metaTracking';
 import { PHONE_DISPLAY } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
@@ -197,90 +197,27 @@ function OrderFormEmbed() {
       .catch(() => {});
   }, []);
 
-  const initiateCheckoutRef = useRef<{ fired: boolean; inFlight: boolean; promise: Promise<void> | null }>({
-    fired: false,
-    inFlight: false,
-    promise: null,
-  });
-
-  const handleInitiateCheckout = async (): Promise<void> => {
-    const ref = initiateCheckoutRef.current;
-
-    // Already done — nothing to wait for
-    if (ref.fired) return;
-
-    // A call is already running; await that same promise so the redirect waits for it
-    if (ref.inFlight && ref.promise) return ref.promise;
-
-    ref.inFlight = true;
-
-    const selectedPackage = form.package
-      ? PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
-      : null;
-    const pkg = selectedPackage || PACKAGES.find(p => p.isPopular) || PACKAGES[0];
-    if (!pkg) {
-      ref.inFlight = false;
-      return;
-    }
-
-    // Fire InitiateCheckout as soon as we have an email or a phone number
-    // (main or WhatsApp) so Meta gets contact data immediately.
-    const email = form.email.trim().toLowerCase();
-    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
-    if (!isValidEmail(email) && !phone) {
-      ref.inFlight = false;
-      return;
-    }
-
-    // Lock before any await so no second handleInitiateCheckout can run concurrently
-    ref.fired = true;
-    const nameParts = form.name.trim().split(/\s+/);
-    ref.promise = fireInitiateCheckout({
-      packageName: pkg.name,
-      amount: pkg.price + pkg.deliveryFee,
-      email: isValidEmail(email) ? email : undefined,
-      phone: phone || undefined,
-      firstName: nameParts[0],
-      lastName: nameParts.slice(1).join(' '),
-      state: form.state || undefined,
-      city: extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current),
-    });
-
-    try {
-      await ref.promise;
-    } catch {
-      // Reset the fired flag only on error so a later valid attempt can retry
-      ref.fired = false;
-    } finally {
-      ref.inFlight = false;
-      ref.promise = null;
-    }
-  };
-
+  // Feed form state into the module's InitiateCheckout lifecycle.
+  // The module fires once name + valid Nigerian phone are present.
   useEffect(() => {
-    handleInitiateCheckout();
-  }, [form.email, form.phone, form.whatsapp, form.name, form.package]);
-
-  // Send any valid contact info to Meta immediately (debounced) so Advanced
-  // Matching and CAPI user_data are kept up to date as the user types.
-  useEffect(() => {
-    const email = form.email.trim().toLowerCase();
-    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
-    if (!isValidEmail(email) && !phone) return;
-    const nameParts = form.name.trim().split(/\s+/);
     const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
-    const handler = setTimeout(() => {
-      reinitPixelWithUserData({
-        email: isValidEmail(email) ? email : undefined,
-        phone: phone || undefined,
-        firstName: nameParts[0] || undefined,
-        lastName: nameParts.slice(1).join(' ') || undefined,
-        state: form.state || undefined,
-        city,
-      });
-    }, 500);
-    return () => clearTimeout(handler);
-  }, [form.email, form.phone, form.whatsapp, form.name, form.state, form.address]);
+    const pkg = form.package ? PACKAGES.find(p => p.slug === form.package) : undefined;
+    const deliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
+    const value = pkg ? pkg.price + deliveryFee : undefined;
+    meta.updateCheckout({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      state: form.state,
+      city,
+      contentName: pkg?.name,
+      contentIds: pkg ? [pkg.sku || pkg.id] : undefined,
+      contentType: 'product',
+      value,
+      currency: 'NGN',
+      numItems: pkg?.quantity,
+    }).catch(() => {});
+  }, [form.name, form.phone, form.email, form.state, form.address, form.package, form.deliveryType]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
@@ -396,17 +333,6 @@ function OrderFormEmbed() {
       return;
     }
 
-    // Wait for the single InitiateCheckout call to finish or time out before redirecting.
-    // If the useEffect already started it, handleInitiateCheckout returns the in-flight promise.
-    try {
-      await Promise.race([
-        handleInitiateCheckout(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('InitiateCheckout timeout')), 1200)),
-      ]);
-    } catch {
-      // Order submission continues even if tracking fails or times out
-    }
-
     setSubmitting(true);
 
     try {
@@ -426,6 +352,10 @@ function OrderFormEmbed() {
       const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
       const total = packagePrice + currentDeliveryFee;
 
+      const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
+
+      const trackingContext = meta.getTrackingContext();
+
       const payload = {
         checkoutAttemptId,
         name: form.name,
@@ -442,11 +372,15 @@ function OrderFormEmbed() {
         sku: pkg?.sku || '',
         deliveryDate: form.deliveryDate || '',
         lga: form.lga || '',
+        city: city || undefined,
         landmark: form.landmark || '',
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
         click_id: '',
         landing_page_url: window.location.href,
+        metaExternalId: trackingContext.externalId,
+        fbp: trackingContext.fbp ?? undefined,
+        fbc: trackingContext.fbc ?? undefined,
       };
 
       console.log('[OrderForm] Sending payload to /api/order:', payload);

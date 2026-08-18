@@ -20,9 +20,20 @@ const rootEl = document.getElementById("root")!;
 // Remove splash screen before React hydrates
 const splash = document.getElementById("splash");
 if (splash) splash.remove();
-// Also remove the inline <style> for the splash spinner
+
+// Remove the inline fallback <style> only after the external main CSS has loaded,
+// so the pre-rendered content is never left unstyled.
 const splashStyle = rootEl.querySelector("style");
-if (splashStyle) splashStyle.remove();
+const removeFallbackStyles = () => {
+  if (splashStyle) splashStyle.remove();
+};
+
+const mainCss = document.getElementById("main-css") as HTMLLinkElement | null;
+if (mainCss && mainCss.rel !== "stylesheet") {
+  mainCss.addEventListener("load", removeFallbackStyles, { once: true });
+} else {
+  removeFallbackStyles();
+}
 
 // Hydrate the SSG pre-rendered HTML
 hydrateRoot(rootEl, <App />, {

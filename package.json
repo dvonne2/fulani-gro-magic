@@ -35,6 +35,7 @@
     "react-router-dom": "^6.30.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "vitalvida-meta-tracking": "github:dvonne2/vitalvida-meta-tracking#2372197caeee7d5f6d69571edd7627ac3eeada44",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -56,8 +57,8 @@
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
     "terser": "^5.46.0",
-    "typescript": "^5.8.3",
+    "typescript": "5.8.3",
     "typescript-eslint": "^8.38.0",
-    "vite": "^7.3.1"
+    "vite": "6.4.3"
   }
 }

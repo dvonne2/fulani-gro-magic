@@ -9,7 +9,7 @@
  */
 
 import { createServer } from 'vite';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -89,13 +89,27 @@ async function ssg() {
         /<link[^>]*href="\/assets\/main-[^"]+\.css"[^>]*>.*?(<\/noscript>)?/gs,
         ''
       );
-      // Insert a single clean async pattern
-      const asyncCss = `<link rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
+      // Insert a single clean async pattern with an id so main.tsx can wait for it
+      const asyncCss = `<link id="main-css" rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
       // Insert before </head>
       html = html.replace('</head>', asyncCss + '\n    </head>');
     }
+
+    // Inject modulepreload hints for the entry and react-vendor chunks so the browser
+    // does not need to discover them via the main module's import graph.
+    const ASSETS_DIR = resolve(ROOT, 'dist', 'assets');
+    const assets = readdirSync(ASSETS_DIR);
+    const preloads = [];
+    const mainChunk = assets.find(f => f.startsWith('main-') && f.endsWith('.js'));
+    const reactChunk = assets.find(f => f.startsWith('react-vendor-') && f.endsWith('.js'));
+    if (mainChunk) preloads.push(`<link rel="modulepreload" crossorigin href="/assets/${mainChunk}">`);
+    if (reactChunk) preloads.push(`<link rel="modulepreload" crossorigin href="/assets/${reactChunk}">`);
+    if (preloads.length) {
+      html = html.replace('</head>', preloads.join('\n    ') + '\n    </head>');
+    }
+
     writeFileSync(DIST_INDEX, html, 'utf-8');
-    console.log('[ssg] Applied async CSS pattern to main stylesheet');
+    console.log('[ssg] Applied async CSS pattern and modulepreload hints');
   } catch (err) {
     console.error('[ssg] FAILED:', err.message);
     if (err.stack) console.error(err.stack);
