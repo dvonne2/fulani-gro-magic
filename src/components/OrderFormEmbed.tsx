@@ -202,7 +202,7 @@ function OrderFormEmbed() {
   useEffect(() => {
     const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
     const pkg = form.package ? PACKAGES.find(p => p.slug === form.package) : undefined;
-    const deliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
+    const deliveryFee = 0;
     const value = pkg ? pkg.price + deliveryFee : undefined;
     meta.updateCheckout({
       name: form.name,
@@ -349,8 +349,8 @@ function OrderFormEmbed() {
         return;
       }
 
-      const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
-      const total = packagePrice + currentDeliveryFee;
+      const currentDeliveryFee = 0;
+      const total = packagePrice;
 
       const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
 
@@ -717,8 +717,8 @@ function OrderFormEmbed() {
                         ₦{pkg.price.toLocaleString('en-NG')}
                       </span>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                      {pkg.items} · + delivery fee (select below)
+                    <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
+                      {pkg.items} · FREE DELIVERY TODAY ONLY
                     </div>
                   </div>
                 </label>
@@ -729,20 +729,17 @@ function OrderFormEmbed() {
 
         {/* Delivery Fee Selection */}
         <div style={{ marginBottom: '30px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Delivery Fee
-          </label>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'next_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'next_day' ? '#f0f4ff' : '#fff' }}>
-              <input type="radio" name="deliveryType" value="next_day" checked={form.deliveryType === 'next_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
-              <span style={{ fontWeight: '600', color: '#333' }}>1–3 Days Delivery</span>
-              <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦3,000</span>
-            </label>
-            <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'same_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'same_day' ? '#f0f4ff' : '#fff' }}>
-              <input type="radio" name="deliveryType" value="same_day" checked={form.deliveryType === 'same_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
-              <span style={{ fontWeight: '600', color: '#333' }}>24 Hours Delivery</span>
-              <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦5,000</span>
-            </label>
+          <div style={{
+            padding: '16px 20px',
+            border: '2px solid #d82726',
+            borderRadius: '8px',
+            backgroundColor: '#fff5f5',
+            color: '#d82726',
+            fontSize: '16px',
+            fontWeight: 700,
+            textAlign: 'center',
+          }}>
+            FREE DELIVERY TODAY ONLY
           </div>
         </div>
 
@@ -784,14 +781,14 @@ function OrderFormEmbed() {
         <div style={S.sum}>
           {(() => {
             const pkg = PACKAGES.find(p => p.slug === form.package);
-            const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
-            const total = (pkg?.price || 0) + currentDeliveryFee;
+            const currentDeliveryFee = 0;
+            const total = pkg?.price || 0;
             return (
               <>
                 <div style={S.sr}><span>Product</span><span>{pkg?.name || '—'}</span></div>
                 <div style={S.sr}><span>Quantity</span><span>{pkg?.quantity || 1}</span></div>
                 <div style={S.sr}><span>Product amount</span><span>₦{(pkg?.price || 0).toLocaleString('en-NG')}</span></div>
-                <div style={S.sr}><span>Delivery fee</span><span>₦{currentDeliveryFee.toLocaleString('en-NG')}</span></div>
+                <div style={S.sr}><span>Delivery</span><span style={{ color: '#d82726', fontWeight: 700 }}>FREE</span></div>
                 <div style={S.tot}><span>Total payable</span><span>₦{total.toLocaleString('en-NG')}</span></div>
               </>
             );
