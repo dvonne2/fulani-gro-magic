@@ -141,121 +141,7 @@ export const TopStoryBanner = () => {
           </p>
         </div>
 
-        {/* 3-Step System Preview */}
-        <div className="w-full max-w-5xl mx-auto mt-10 px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
-            {[
-              { img: `${BASE_PATH}assets/Shampoo1.webp`, label: 'Fulani Hair Gro™ Shampoo', price: 14999 },
-              { img: `${BASE_PATH}assets/Conditioner2.webp`, label: 'Fulani Hair Gro™ Conditioner', price: 14999 },
-              { img: `${BASE_PATH}assets/pomade3.webp`, label: 'Fulani Hair Gro™ Hair Pomade', price: 17999 },
-            ].map((item, i) => (
-              <div key={i} className="text-center space-y-3">
-                <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
-                  <img
-                    src={item.img}
-                    alt={item.label}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    width="208"
-                    height="208"
-                  />
-                </div>
-                <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
-                <p className="text-lg md:text-xl font-bold text-[#B80F66]">₦{item.price.toLocaleString('en-NG')}</p>
-                {item.label === 'Fulani Hair Gro™ Shampoo' && (
-                  <a
-                    href="#bundle-selector"
-                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                    data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
-                  >
-                    Order Now
-                  </a>
-                )}
-                {item.label === 'Fulani Hair Gro™ Conditioner' && (
-                  <a
-                    href="#bundle-selector"
-                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                    data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
-                  >
-                    Order Now
-                  </a>
-                )}
-                {item.label === 'Fulani Hair Gro™ Hair Pomade' && (
-                  <a
-                    href="#bundle-selector"
-                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                    data-form-cta="true"
-                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
-                  >
-                    Order Now
-                  </a>
-                )}
-                {item.label === 'Fulani Hair Gro™ Shampoo' && (
-                  <div className="mt-3 text-left">
-                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
-                      Why Your Hair Needs Our Shampoo
-                    </h3>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      You can pour oil on your hair every single day...
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      If your scalp is unhealthy, don&apos;t expect healthy hair growth.
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Your hair grows from your scalp. That&apos;s why the first step to healthier, longer-looking hair is keeping your scalp clean and healthy.
-                    </p>
-                  </div>
-                )}
-
-                {item.label === 'Fulani Hair Gro™ Conditioner' && (
-                  <div className="mt-3 text-left">
-                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
-                      Why Your Hair Needs Our Conditioner
-                    </h3>
-                    <h4 className="font-sans font-bold text-sm text-gray-800 mb-1">
-                      Hair Doesn&apos;t Stop Growing...
-                    </h4>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      <strong>It Breaks.</strong>
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      If your hair snaps every time you comb, wash or style it, you&apos;ll never enjoy the length you&apos;ve worked so hard to grow.
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      That&apos;s why Fulani Hair Gro Conditioner helps soften, nourish and strengthen your hair—helping reduce breakage so you can retain more of your natural length.
-                    </p>
-                  </div>
-                )}
-
-                {item.label === 'Fulani Hair Gro™ Hair Pomade' && (
-                  <div className="mt-3 text-left">
-                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
-                      Why Your Hair Needs Our Pomade
-                    </h3>
-                    <h4 className="font-sans font-bold text-sm text-gray-800 mb-1">
-                      Hair Needs To Be Fed
-                    </h4>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      A clean scalp is only the beginning.
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      Strong, healthy-looking hair needs daily nourishment to help support healthy growth.
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                      Without the right nourishment, hair can become dry, weak and prone to breakage.
-                    </p>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      That&apos;s why Fulani Hair Gro Pomade is carefully formulated to nourish your scalp and hair follicle, helping support longer, fuller, healthier-looking hair.
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* 3-Step System Preview removed */}
 
         {/* Hero CTA moved above the growth system heading */}
 
@@ -409,7 +295,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#DAA520', 
+                  color: '#854d0e', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -454,7 +340,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#DAA520', 
+                  color: '#854d0e', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -500,7 +386,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#DAA520', 
+                  color: '#854d0e', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -930,7 +816,7 @@ This thing is not hype.
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
+            className="flex items-center justify-center gap-2 bg-[#15803d] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
@@ -1020,7 +906,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#DAA520',
+              color: '#854d0e',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'mung' ? '▲' : '▼'}
@@ -1088,7 +974,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#DAA520',
+              color: '#854d0e',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'curcumin' ? '▲' : '▼'}
@@ -1156,7 +1042,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#DAA520',
+              color: '#854d0e',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'nicotiana' ? '▲' : '▼'}
@@ -1340,6 +1226,8 @@ This thing is not hype.
                   title="Fulani Hair Gro Results Video"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
                   webp
+                  lazyLoad
+                  lazyLoad
                 />
               </div>
               <h3 style={{
@@ -1383,7 +1271,9 @@ This thing is not hype.
                   id="xJ4vGH2i48g"
                   title="Fulani Hair Gro Customer Testimonial"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
+                  lazyLoad
                   webp
+                  lazyLoad
                 />
               </div>
               <h3 style={{
@@ -1425,9 +1315,11 @@ This thing is not hype.
               }}>
                 <LiteYouTubeEmbed
                   id="LNkhqS3-Kxo"
-                  title="Fulani Hair Gro Before and After"
+                  titl
+                  lazyLoade="Fulani Hair Gro Before and After"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
                   webp
+                  lazyLoad
                 />
               </div>
               <h3 style={{
@@ -1457,7 +1349,7 @@ This thing is not hype.
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
+            className="flex items-center justify-center gap-2 bg-[#15803d] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
