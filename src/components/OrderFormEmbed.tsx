@@ -695,31 +695,75 @@ function OrderFormEmbed() {
                     style={{ cursor: 'pointer', marginTop: '3px' }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
-                        {pkg.name}
-                        {pkg.label && (
-                          <span style={{
-                            marginLeft: '8px',
-                            fontSize: '10px',
-                            fontWeight: '700',
-                            color: '#fff',
-                            backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
-                            padding: '2px 6px',
-                            borderRadius: '4px',
-                            textTransform: 'uppercase',
-                          }}>
-                            {pkg.label}
+                    {pkg.slug === 'self_love_plus_b2gof' ? (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                          <span style={{ fontSize: '15px', fontWeight: '800', color: '#d82726' }}>
+                            SELF LOVE PLUS — BUY 2, GET 1 FREE
+                            {pkg.label && (
+                              <span style={{
+                                marginLeft: '8px',
+                                fontSize: '10px',
+                                fontWeight: '700',
+                                color: '#fff',
+                                backgroundColor: '#d82726',
+                                padding: '2px 6px',
+                                borderRadius: '4px',
+                                textTransform: 'uppercase',
+                              }}>
+                                {pkg.label}
+                              </span>
+                            )}
                           </span>
-                        )}
-                      </span>
-                      <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
-                        ₦{pkg.price.toLocaleString('en-NG')}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
-                      {pkg.items} · FREE DELIVERY TODAY ONLY
-                    </div>
+                          <span style={{ fontSize: '17px', fontWeight: '800', color: '#059669' }}>
+                            ₦{pkg.price.toLocaleString('en-NG')}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '14px', fontWeight: '800', color: '#d82726', marginTop: '6px' }}>
+                          🔥 BUY 2 COMPLETE SETS — GET THE 3RD SET FREE
+                        </div>
+                        <div style={{ fontSize: '13px', color: '#333', marginTop: '4px', fontWeight: 600 }}>
+                          YOU GET 3 OF EACH:
+                        </div>
+                        <div style={{ fontSize: '13px', color: '#444', marginTop: '2px' }}>
+                          3 Shampoos + 3 Growth Pomades + 3 Conditioners
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#d82726', marginTop: '4px' }}>
+                          🎁 1 COMPLETE SET IS FREE
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
+                          FREE DELIVERY TODAY ONLY
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                            {pkg.name}
+                            {pkg.label && (
+                              <span style={{
+                                marginLeft: '8px',
+                                fontSize: '10px',
+                                fontWeight: '700',
+                                color: '#fff',
+                                backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
+                                padding: '2px 6px',
+                                borderRadius: '4px',
+                                textTransform: 'uppercase',
+                              }}>
+                                {pkg.label}
+                              </span>
+                            )}
+                          </span>
+                          <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
+                            ₦{pkg.price.toLocaleString('en-NG')}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
+                          {pkg.items} · FREE DELIVERY TODAY ONLY
+                        </div>
+                      </>
+                    )}
                   </div>
                 </label>
               );
