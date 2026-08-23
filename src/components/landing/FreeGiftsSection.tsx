@@ -47,7 +47,7 @@ const giftItems = [
     sub: '',
     text: 'The 7 Major Things I Did to Grow My Hair 22 Inches + How You Can Too!\nBy H. Nasir — The Fulani Hair Gro',
     icon: BookOpen,
-    image: `${BASE_PATH}assets/ebook-7-things.webp`,
+    image: `${BASE_PATH}assets/book.png`,
     large: true,
   },
   {
