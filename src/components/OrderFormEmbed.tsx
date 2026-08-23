@@ -758,7 +758,7 @@ function OrderFormEmbed() {
                             ))}
                           </div>
                         )}
-                        <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
                           {pkg.referencePrice && (
                             <span style={{ fontSize: '13px', color: '#9ca3af', textDecoration: 'line-through', whiteSpace: 'nowrap' }}>
                               ₦{pkg.referencePrice.toLocaleString('en-NG')}
