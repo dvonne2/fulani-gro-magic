@@ -181,6 +181,7 @@ function OrderFormEmbed() {
     address: '',
     state: '',
     package: '',
+    quantity: 1,
     deliveryDate: '',
     deliveryType: 'next_day'
   });
@@ -201,7 +202,7 @@ function OrderFormEmbed() {
     const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
     const pkg = form.package ? PACKAGES.find(p => p.slug === form.package) : undefined;
     const deliveryFee = 0;
-    const value = pkg ? pkg.price + deliveryFee : undefined;
+    const value = pkg ? pkg.price * (form.quantity || 1) + deliveryFee : undefined;
     meta.updateCheckout({
       name: form.name,
       phone: form.phone,
@@ -213,9 +214,9 @@ function OrderFormEmbed() {
       contentType: 'product',
       value,
       currency: 'NGN',
-      numItems: pkg?.quantity,
+      numItems: pkg ? (pkg.quantity || 1) * (form.quantity || 1) : undefined,
     }).catch(() => {});
-  }, [form.name, form.phone, form.email, form.state, form.address, form.package, form.deliveryType]);
+  }, [form.name, form.phone, form.email, form.state, form.address, form.package, form.quantity, form.deliveryType]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
@@ -338,7 +339,7 @@ function OrderFormEmbed() {
       // immediate retry) so the backend can deduplicate accidental double-clicks.
       const checkoutAttemptId = getCheckoutAttemptId();
       const pkg = PACKAGES.find(p => p.slug === form.package);
-      const packagePrice = pkg?.price || 0;
+      const packagePrice = (pkg?.price || 0) * (form.quantity || 1);
 
       if (packagePrice === 0) {
         alert('Please select a package');
@@ -366,7 +367,7 @@ function OrderFormEmbed() {
         amount: total,
         productAmount: packagePrice,
         deliveryFee: currentDeliveryFee,
-        quantity: pkg?.quantity || 1,
+        quantity: form.quantity || 1,
         sku: pkg?.sku || '',
         deliveryDate: form.deliveryDate || '',
         lga: form.lga || '',
@@ -416,7 +417,7 @@ function OrderFormEmbed() {
           packageName: payload.package,
           state: payload.state,
           lga: payload.lga,
-          numItems: pkg?.quantity || 1,
+          numItems: (pkg?.quantity || 1) * (form.quantity || 1),
         }));
       } catch (e) {
         console.error('[OrderForm] Failed to persist order data:', e);
@@ -806,6 +807,31 @@ function OrderFormEmbed() {
           </div>
         </div>
 
+        {/* Quantity */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Quantity
+          </label>
+          <select
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ddd',
+              borderRadius: '6px',
+              fontSize: '16px',
+              backgroundColor: '#fff'
+            }}
+            value={String(form.quantity || 1)}
+            disabled={!form.package}
+            onChange={e => setForm(prev => ({ ...prev, quantity: Number(e.target.value) }))}
+            aria-label="Select quantity"
+          >
+            {[1,2,3,4,5,6,7,8,9,10].map(n => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Delivery Fee Selection */}
         <div style={{ marginBottom: '30px' }}>
           <div style={{
@@ -860,12 +886,13 @@ function OrderFormEmbed() {
           {(() => {
             const pkg = PACKAGES.find(p => p.slug === form.package);
             const currentDeliveryFee = 0;
-            const total = pkg?.price || 0;
+            const packagePrice = (pkg?.price || 0) * (form.quantity || 1);
+            const total = packagePrice + currentDeliveryFee;
             return (
               <>
                 <div style={S.sr}><span>Product</span><span>{pkg?.displayName || pkg?.name || '—'}</span></div>
-                <div style={S.sr}><span>Quantity</span><span>{pkg?.quantity || 1}</span></div>
-                <div style={S.sr}><span>Product amount</span><span>₦{(pkg?.price || 0).toLocaleString('en-NG')}</span></div>
+                <div style={S.sr}><span>Quantity</span><span>{form.quantity || 1}</span></div>
+                <div style={S.sr}><span>Product amount</span><span>₦{packagePrice.toLocaleString('en-NG')}</span></div>
                 <div style={S.sr}><span>Delivery</span><span style={{ color: '#d82726', fontWeight: 700 }}>FREE</span></div>
                 <div style={S.tot}><span>Total payable</span><span>₦{total.toLocaleString('en-NG')}</span></div>
               </>
