@@ -926,7 +926,7 @@ function OrderFormEmbed() {
         </button>
 
         <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '15px', fontWeight: 700, color: '#244beb' }}>
-          Free Delivery + Pay After Delivery
+          Free Delivery + Pay On Delivery
         </div>
       </div>
     </div>
