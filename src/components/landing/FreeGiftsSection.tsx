@@ -87,13 +87,13 @@ const trustItems = [
 function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
   return (
     <div
-      className="relative w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
+      className="relative w-48 h-48 md:w-44 md:h-44 lg:w-48 lg:h-48 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
         src={src}
         alt=""
-        className="absolute inset-0 w-full h-full object-contain p-2 hidden gift-img"
+        className="absolute inset-0 w-full h-full object-contain p-1 md:p-2 hidden gift-img"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = 'none';
           const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
@@ -109,7 +109,7 @@ function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
         className="w-full h-full flex items-center justify-center gift-fallback"
         style={{ color: green }}
       >
-        <Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.5} />
+        <Icon className="w-16 h-16 md:w-20 md:h-20" strokeWidth={1.5} />
       </span>
     </div>
   );
@@ -165,16 +165,16 @@ export default function FreeGiftsSection() {
         </div>
 
         {/* Gift grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-10 md:mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4 place-items-center mb-10 md:mb-14">
           {giftItems.map((gift, idx) => {
             const Icon = gift.icon;
             return (
               <div
                 key={idx}
                 className={[
-                  'rounded-2xl p-3 md:p-4 text-center flex flex-col justify-between shadow-lg',
+                  'rounded-2xl p-4 text-center flex flex-col justify-between shadow-lg w-[94%] md:w-full',
                   'bg-white',
-                  gift.large ? 'col-span-2' : '',
+                  gift.large ? 'md:col-span-2' : '',
                 ].join(' ')}
                 style={{
                   border: `2px solid ${gold}`,
@@ -189,20 +189,20 @@ export default function FreeGiftsSection() {
                   </span>
                   <GiftImage src={gift.image} Icon={Icon} />
                   <h4
-                    className="font-black text-sm md:text-base leading-tight mb-1"
+                    className="font-black text-lg md:text-base leading-tight mb-1"
                     style={{ color: green }}
                   >
                     {gift.title}
                   </h4>
                   {gift.sub && (
                     <p
-                      className="font-bold text-xs md:text-sm mb-1"
+                      className="font-bold text-sm md:text-sm mb-1"
                       style={{ color: red }}
                     >
                       {gift.sub}
                     </p>
                   )}
-                  <p className="text-gray-700 text-xs md:text-sm whitespace-pre-line leading-relaxed">
+                  <p className="text-gray-700 text-sm md:text-sm whitespace-pre-line leading-relaxed">
                     {gift.text}
                   </p>
                 </div>
