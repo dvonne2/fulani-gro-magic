@@ -119,7 +119,7 @@ export const BundleSelector = () => {
           <section key={pkg.id} className={`card ${pkg.isPopular ? 'popular' : ''}`}>
             {pkg.isPopular && <span className="badge">★ Best Deal</span>}
             {pkg.label && <p className="tier">{pkg.label}</p>}
-            <h2 className="pkg">{pkg.name}</h2>
+            <h2 className="pkg">{pkg.displayName || pkg.name}</h2>
             <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
             {pkg.deliveryFee > 0 && (

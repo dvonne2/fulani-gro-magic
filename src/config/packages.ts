@@ -1,3 +1,14 @@
+export interface PackageBadge {
+  text: string;
+  tone: 'accent' | 'success';
+}
+
+export interface PackageValueRow {
+  label: string;
+  amount: number;
+  strong?: boolean;
+}
+
 export interface Package {
   id: string;
   slug: string;
@@ -13,6 +24,18 @@ export interface Package {
   label: string;
   sku: string;
   quantity: number;
+
+  // Display-only copy. `name` stays the wire/fulfilment identifier (order payload
+  // `package` field and the ThankYou product map key), so customer-facing renames
+  // live here instead.
+  displayName?: string;
+  itemsLabel?: string;
+  offerBullets?: string[];
+  badges?: PackageBadge[];
+  referencePrice?: number;
+  valueBreakdown?: PackageValueRow[];
+  tagline?: string;
+  highlight?: boolean;
 }
 
 export const PACKAGES: Package[] = [
@@ -32,6 +55,7 @@ export const PACKAGES: Package[] = [
     label: '',
     sku: 'CHGS-001',
     quantity: 1,
+    displayName: 'Self Love Plus',
   },
   {
     id: 'PKG-002',
@@ -64,6 +88,7 @@ export const PACKAGES: Package[] = [
     label: '',
     sku: 'SLB-003',
     quantity: 1,
+    itemsLabel: 'Buy 2 shampoos, get 1 free · Buy 2 pomades, get 1 free',
   },
   {
     id: 'PKG-004',
@@ -80,6 +105,24 @@ export const PACKAGES: Package[] = [
     label: 'Best Seller · Best Value · Recommended',
     sku: 'SLPB-004',
     quantity: 1,
+    displayName: 'Self Love Plus B2GOF',
+    highlight: true,
+    offerBullets: [
+      'Buy 2 shampoos, get 1 free',
+      'Buy 2 pomades, get 1 free',
+      'Buy 2 conditioners, get 1 free',
+    ],
+    badges: [
+      { text: 'Best deal', tone: 'accent' },
+      { text: 'Save ₦31,500', tone: 'success' },
+    ],
+    referencePrice: 98250,
+    valueBreakdown: [
+      { label: '2 sets at ₦32,750', amount: 65500 },
+      { label: 'Add just', amount: 1250 },
+      { label: 'Get a 3rd set free, worth', amount: 32750, strong: true },
+    ],
+    tagline: 'Most customers pick this — free delivery today only',
   },
   {
     id: 'PKG-005',

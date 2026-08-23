@@ -105,7 +105,7 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
         <div className="bg-white border-2 border-gold/30 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-3xl">🫙</span>
-            <h3 className="font-cinzel text-xl md:text-2xl text-[#DAA520]">Current Batch Status:</h3>
+            <h3 className="font-cinzel text-xl md:text-2xl text-[#854d0e]">Current Batch Status:</h3>
           </div>
 
           {/* Progress bar */}
@@ -121,7 +121,7 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
             </div>
             <div className="flex justify-between mt-2 text-lg md:text-xl">
               <span className="text-[#333333]">0</span>
-              <span className="text-[#DAA520] font-bold text-xl md:text-2xl">{stockCount} bundles remaining</span>
+              <span className="text-[#854d0e] font-bold text-xl md:text-2xl">{stockCount} bundles remaining</span>
               <span className="text-[#333333]">{totalInBatch}</span>
             </div>
           </div>
@@ -129,7 +129,7 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
           {/* Batch details */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-lg md:text-xl text-[#333333]">
             <div className="flex items-center gap-2">
-              <span className="text-[#DAA520]">Batch #{batchNumber}</span>
+              <span className="text-[#854d0e]">Batch #{batchNumber}</span>
               <span>·</span>
               <span>Hand-prepared December 2025</span>
             </div>

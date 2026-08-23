@@ -141,7 +141,84 @@ export const TopStoryBanner = () => {
           </p>
         </div>
 
-        {/* 3-Step System Preview removed */}
+        {/* 3-Step System Preview (education only — single products are not sold separately) */}
+        <div className="w-full max-w-5xl mx-auto mt-10 px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
+            {[
+              {
+                img: `${BASE_PATH}assets/Shampoo1.webp`,
+                label: 'Fulani Hair Gro™ Shampoo',
+                heading: 'Why Your Hair Needs Our Shampoo',
+                body: [
+                  'You can pour oil on your hair every single day...',
+                  'If your scalp is unhealthy, don\u2019t expect healthy hair growth.',
+                  'Your hair grows from your scalp. That\u2019s why the first step to healthier, longer-looking hair is keeping your scalp clean and healthy.',
+                ],
+              },
+              {
+                img: `${BASE_PATH}assets/Conditioner2.webp`,
+                label: 'Fulani Hair Gro™ Conditioner',
+                heading: 'Why Your Hair Needs Our Conditioner',
+                subheading: 'Hair Doesn\u2019t Stop Growing...',
+                lead: 'It Breaks.',
+                body: [
+                  'If your hair snaps every time you comb, wash or style it, you\u2019ll never enjoy the length you\u2019ve worked so hard to grow.',
+                  'That\u2019s why Fulani Hair Gro Conditioner helps soften, nourish and strengthen your hair\u2014helping reduce breakage so you can retain more of your natural length.',
+                ],
+              },
+              {
+                img: `${BASE_PATH}assets/pomade3.webp`,
+                label: 'Fulani Hair Gro™ Hair Pomade',
+                heading: 'Why Your Hair Needs Our Pomade',
+                subheading: 'Hair Needs To Be Fed',
+                body: [
+                  'A clean scalp is only the beginning.',
+                  'Strong, healthy-looking hair needs daily nourishment to help support healthy growth.',
+                  'Without the right nourishment, hair can become dry, weak and prone to breakage.',
+                  'That\u2019s why Fulani Hair Gro Pomade is carefully formulated to nourish your scalp and hair follicle, helping support longer, fuller, healthier-looking hair.',
+                ],
+              },
+            ].map((item) => (
+              <div key={item.label} className="text-center space-y-3">
+                <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
+                  <img
+                    src={item.img}
+                    alt={item.label}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    width="208"
+                    height="208"
+                  />
+                </div>
+                <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
+                <div className="mt-3 text-left">
+                  <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
+                    {item.heading}
+                  </h3>
+                  {item.subheading && (
+                    <h4 className="font-sans font-bold text-sm text-gray-800 mb-1">
+                      {item.subheading}
+                    </h4>
+                  )}
+                  {item.lead && (
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      <strong>{item.lead}</strong>
+                    </p>
+                  )}
+                  {item.body.map((paragraph, index) => (
+                    <p
+                      key={paragraph}
+                      className={`text-sm text-gray-700 leading-relaxed${index < item.body.length - 1 ? ' mb-2' : ''}`}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Hero CTA moved above the growth system heading */}
 

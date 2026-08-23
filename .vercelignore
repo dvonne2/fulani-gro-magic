@@ -1,0 +1,22 @@
+# Leftover assets not imported by the app
+assets-backup/
+src/assets/
+src/assets/products/
+
+# Stray bundle archive folders
+untitled folder/
+DIST BUNDL/
+
+# Root-level leftover PNG not referenced anywhere
+hero.png
+
+# Logs and temp files
+*.log
+logs/
+
+# Local build output / Vite bundle analysis
+dist/
+dist-ssr/
+lighthouse-report*
+*.html
+bun.lockb

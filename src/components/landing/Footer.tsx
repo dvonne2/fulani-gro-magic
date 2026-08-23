@@ -51,7 +51,7 @@ export const Footer = () => {
           
           .footer-cta-button {
             animation: bling-pulse 2s ease-in-out infinite;
-            background: linear-gradient(90deg, #5ec239 0%, #4cae4e 50%, #5ec239 100%);
+            background: linear-gradient(90deg, #15803d 0%, #14502d 50%, #15803d 100%);
             background-size: 200% 100%;
             background-position: center center;
             transition: transform 0.3s ease;

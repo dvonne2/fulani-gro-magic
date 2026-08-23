@@ -671,6 +671,7 @@ function OrderFormEmbed() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {PACKAGES.map((pkg) => {
               const isSelected = form.package === pkg.slug;
+              const displayName = pkg.displayName || pkg.name;
               return (
                 <label
                   key={pkg.slug}
@@ -679,11 +680,14 @@ function OrderFormEmbed() {
                     alignItems: 'flex-start',
                     gap: '10px',
                     padding: '12px',
-                    border: `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
+                    border: pkg.highlight
+                      ? '2px solid #2563eb'
+                      : `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
                     borderRadius: '8px',
                     cursor: 'pointer',
-                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+                    backgroundColor: pkg.highlight ? '#eaf0fd' : (isSelected ? '#f0f8ff' : '#fff'),
                     transition: 'all 0.2s ease',
+                    minWidth: 0,
                   }}
                 >
                   <input
@@ -692,54 +696,91 @@ function OrderFormEmbed() {
                     value={pkg.slug}
                     checked={isSelected}
                     onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                    style={{ cursor: 'pointer', marginTop: '3px' }}
+                    style={{ cursor: 'pointer', marginTop: '3px', flexShrink: 0 }}
                   />
-                  <div style={{ flex: 1 }}>
-                    {pkg.slug === 'self_love_plus_b2gof' ? (
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    {pkg.highlight ? (
                       <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                          <span style={{ fontSize: '15px', fontWeight: '800', color: '#d82726' }}>
-                            SELF LOVE PLUS — BUY 2, GET 1 FREE
-                            {pkg.label && (
-                              <span style={{
-                                marginLeft: '8px',
-                                fontSize: '10px',
-                                fontWeight: '700',
-                                color: '#fff',
-                                backgroundColor: '#d82726',
-                                padding: '2px 6px',
-                                borderRadius: '4px',
-                                textTransform: 'uppercase',
-                              }}>
-                                {pkg.label}
+                        {pkg.badges && pkg.badges.length > 0 && (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+                            {pkg.badges.map(badge => (
+                              <span
+                                key={badge.text}
+                                style={{
+                                  fontSize: '11px',
+                                  fontWeight: 700,
+                                  padding: '3px 8px',
+                                  borderRadius: '999px',
+                                  whiteSpace: 'nowrap',
+                                  color: badge.tone === 'success' ? '#065f46' : '#1d4ed8',
+                                  backgroundColor: badge.tone === 'success' ? '#bbf7d0' : '#dbe6fe',
+                                }}
+                              >
+                                {badge.text}
                               </span>
-                            )}
-                          </span>
-                          <span style={{ fontSize: '17px', fontWeight: '800', color: '#059669' }}>
+                            ))}
+                          </div>
+                        )}
+                        <div style={{ fontSize: '17px', fontWeight: 800, color: '#111', lineHeight: 1.3 }}>
+                          {displayName}
+                        </div>
+                        {pkg.offerBullets && pkg.offerBullets.length > 0 && (
+                          <ul style={{ margin: '8px 0 0', paddingLeft: '20px', listStyle: 'disc outside', color: '#374151', fontSize: '13px', lineHeight: 1.6 }}>
+                            {pkg.offerBullets.map(bullet => (
+                              <li key={bullet}>{bullet}</li>
+                            ))}
+                          </ul>
+                        )}
+                        {pkg.valueBreakdown && pkg.valueBreakdown.length > 0 && (
+                          <div style={{
+                            marginTop: '10px',
+                            padding: '10px 12px',
+                            backgroundColor: '#fff',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '4px',
+                          }}>
+                            {pkg.valueBreakdown.map(row => (
+                              <div
+                                key={row.label}
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'baseline',
+                                  gap: '10px',
+                                  fontSize: '13px',
+                                  color: '#111',
+                                  fontWeight: row.strong ? 700 : 400,
+                                }}
+                              >
+                                <span style={{ minWidth: 0 }}>{row.label}</span>
+                                <span style={{ whiteSpace: 'nowrap' }}>₦{row.amount.toLocaleString('en-NG')}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
+                          {pkg.referencePrice && (
+                            <span style={{ fontSize: '13px', color: '#9ca3af', textDecoration: 'line-through', whiteSpace: 'nowrap' }}>
+                              ₦{pkg.referencePrice.toLocaleString('en-NG')}
+                            </span>
+                          )}
+                          <span style={{ fontSize: '24px', fontWeight: 800, color: '#047857', whiteSpace: 'nowrap' }}>
                             ₦{pkg.price.toLocaleString('en-NG')}
                           </span>
                         </div>
-                        <div style={{ fontSize: '14px', fontWeight: '800', color: '#d82726', marginTop: '6px' }}>
-                          🔥 BUY 2 COMPLETE SETS — GET THE 3RD SET FREE
-                        </div>
-                        <div style={{ fontSize: '13px', color: '#333', marginTop: '4px', fontWeight: 600 }}>
-                          YOU GET 3 OF EACH:
-                        </div>
-                        <div style={{ fontSize: '13px', color: '#444', marginTop: '2px' }}>
-                          3 Shampoos + 3 Growth Pomades + 3 Conditioners
-                        </div>
-                        <div style={{ fontSize: '13px', fontWeight: '700', color: '#d82726', marginTop: '4px' }}>
-                          🎁 1 COMPLETE SET IS FREE
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
-                          FREE DELIVERY TODAY ONLY
-                        </div>
+                        {pkg.tagline && (
+                          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+                            {pkg.tagline}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
                           <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
-                            {pkg.name}
+                            {displayName}
                             {pkg.label && (
                               <span style={{
                                 marginLeft: '8px',
@@ -760,7 +801,7 @@ function OrderFormEmbed() {
                           </span>
                         </div>
                         <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
-                          {pkg.items} · FREE DELIVERY TODAY ONLY
+                          {pkg.itemsLabel || pkg.items} · FREE DELIVERY TODAY ONLY
                         </div>
                       </>
                     )}
@@ -829,7 +870,7 @@ function OrderFormEmbed() {
             const total = pkg?.price || 0;
             return (
               <>
-                <div style={S.sr}><span>Product</span><span>{pkg?.name || '—'}</span></div>
+                <div style={S.sr}><span>Product</span><span>{pkg?.displayName || pkg?.name || '—'}</span></div>
                 <div style={S.sr}><span>Quantity</span><span>{pkg?.quantity || 1}</span></div>
                 <div style={S.sr}><span>Product amount</span><span>₦{(pkg?.price || 0).toLocaleString('en-NG')}</span></div>
                 <div style={S.sr}><span>Delivery</span><span style={{ color: '#d82726', fontWeight: 700 }}>FREE</span></div>
