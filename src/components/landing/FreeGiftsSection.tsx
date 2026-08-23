@@ -32,6 +32,7 @@ const giftItems = [
     text: 'Protect your strands while you sleep.',
     icon: Moon,
     image: `${BASE_PATH}assets/bonnet.jpg`,
+    bigger: true,
   },
   {
     number: '03',
@@ -84,10 +85,24 @@ const trustItems = [
   'WhatsApp Support',
 ];
 
-function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
+function GiftImage({
+  src,
+  Icon,
+  bigger = false,
+}: {
+  src: string;
+  Icon: typeof Sparkles;
+  bigger?: boolean;
+}) {
+  const sizeClass = bigger
+    ? 'w-64 h-64 md:w-52 md:h-52'
+    : 'w-48 h-48 md:w-44 md:h-44';
+  const iconSize = bigger
+    ? 'w-20 h-20 md:w-24 md:h-24'
+    : 'w-16 h-16 md:w-20 md:h-20';
   return (
     <div
-      className="relative w-48 h-48 md:w-44 md:h-44 lg:w-48 lg:h-48 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
+      className={`relative ${sizeClass} mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden`}
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
@@ -109,7 +124,7 @@ function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
         className="w-full h-full flex items-center justify-center gift-fallback"
         style={{ color: green }}
       >
-        <Icon className="w-16 h-16 md:w-20 md:h-20" strokeWidth={1.5} />
+        <Icon className={`${iconSize}`} strokeWidth={1.5} />
       </span>
     </div>
   );
@@ -187,7 +202,7 @@ export default function FreeGiftsSection() {
                   >
                     {gift.number}
                   </span>
-                  <GiftImage src={gift.image} Icon={Icon} />
+                  <GiftImage src={gift.image} Icon={Icon} bigger={gift.bigger} />
                   <h4
                     className="font-black text-lg md:text-base leading-tight mb-1"
                     style={{ color: green }}
