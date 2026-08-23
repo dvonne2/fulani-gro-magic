@@ -59,7 +59,7 @@ const giftItems = [
     sub: '',
     text: 'A simple daily routine you can stick to.',
     icon: BookText,
-    image: `${BASE_PATH}assets/healthy-habits.webp`,
+    image: `${BASE_PATH}assets/book2.png`,
   },
   {
     number: '06',
@@ -67,7 +67,7 @@ const giftItems = [
     sub: '',
     text: 'Direct help while you use your products.',
     icon: MessageCircle,
-    image: `${BASE_PATH}assets/whatsapp-support.webp`,
+    image: `${BASE_PATH}assets/book3.png`,
   },
   {
     number: '07',
@@ -75,7 +75,7 @@ const giftItems = [
     sub: '',
     text: 'Try it risk-free for 30 full days.',
     icon: ShieldCheck,
-    image: `${BASE_PATH}assets/guarantee-badge.webp`,
+    image: `${BASE_PATH}assets/book4.png`,
     large: true,
   },
 ];
