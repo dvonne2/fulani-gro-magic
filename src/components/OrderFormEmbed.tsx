@@ -822,12 +822,11 @@ function OrderFormEmbed() {
               backgroundColor: '#fff'
             }}
             value={String(form.quantity || 1)}
-            disabled={!form.package}
             onChange={e => setForm(prev => ({ ...prev, quantity: Number(e.target.value) }))}
             aria-label="Select quantity"
           >
             {[1,2,3,4,5,6,7,8,9,10].map(n => (
-              <option key={n} value={n}>{n}</option>
+              <option key={n} value={String(n)}>{n}</option>
             ))}
           </select>
         </div>
