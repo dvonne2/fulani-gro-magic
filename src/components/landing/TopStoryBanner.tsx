@@ -33,6 +33,7 @@ const BundleSelector = lazy(() =>
   import('./BundleSelector').then((m) => ({ default: m.BundleSelector }))
 );
 import { PreFormStockWarning } from './PreFormStockWarning';
+import FreeGiftsSection from './FreeGiftsSection';
 
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
@@ -132,12 +133,7 @@ export const TopStoryBanner = () => {
           </span>
         </div>
 
-        <img
-          src={`${BASE_PATH}assets/freegift.webp`}
-          alt="Free gift"
-          className="w-full h-auto"
-          loading="lazy"
-        />
+        <FreeGiftsSection />
 
         <div className="mt-6 max-w-3xl mx-auto text-center space-y-4">
           <h2 className="font-black text-2xl md:text-4xl text-black tracking-tight leading-tight">
