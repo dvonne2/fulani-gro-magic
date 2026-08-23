@@ -816,7 +816,7 @@ function OrderFormEmbed() {
             fontSize: '16px',
             fontWeight: 700,
             textAlign: 'center',
-          }}
+          }}>
             FREE DELIVERY TODAY ONLY
           </div>
         </div>
