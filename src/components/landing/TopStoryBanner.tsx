@@ -625,6 +625,13 @@ export const TopStoryBanner = () => {
             </Dialog>
 
             </div>
+
+            {/* Approved Reviews from Supabase */}
+            {afterHero && (
+              <Suspense fallback={null}>
+                <ReviewsList />
+              </Suspense>
+            )}
         </div>
 
         {/* ORDER FORM */}
