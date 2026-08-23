@@ -51,6 +51,7 @@ const giftItems = [
     icon: BookOpen,
     image: `${BASE_PATH}assets/book.png`,
     large: true,
+    bigger: true,
   },
   {
     number: '05',
