@@ -710,8 +710,8 @@ function OrderFormEmbed() {
                                   padding: '3px 8px',
                                   borderRadius: '999px',
                                   whiteSpace: 'nowrap',
-                                  color: badge.tone === 'success' ? '#065f46' : '#1d4ed8',
-                                  backgroundColor: badge.tone === 'success' ? '#bbf7d0' : '#dbe6fe',
+                                  color: badge.tone === 'success' ? '#065f46' : badge.tone === 'accent' ? '#fff' : '#1d4ed8',
+                                  backgroundColor: badge.tone === 'success' ? '#bbf7d0' : badge.tone === 'accent' ? '#d82726' : '#dbe6fe',
                                 }}
                               >
                                 {badge.text}
