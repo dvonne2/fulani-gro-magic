@@ -924,6 +924,10 @@ function OrderFormEmbed() {
         >
           <span style={{ filter: 'brightness(0) invert(1)' }}>🛒</span> SUBMIT ORDER
         </button>
+
+        <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '15px', fontWeight: 700, color: '#244beb' }}>
+          Free Delivery + Pay After Delivery
+        </div>
       </div>
     </div>
   );
