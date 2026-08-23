@@ -17,7 +17,7 @@ export const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-16 md:py-20 bg-gray-50">
+    <section className="py-16 md:py-20 bg-gray-50" aria-label="Frequently asked questions">
       <div className="max-w-3xl mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
           <p className="font-sans text-sm tracking-widest uppercase text-[#B80F66] font-semibold mb-4">Questions?</p>
