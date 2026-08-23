@@ -41,6 +41,7 @@ const giftItems = [
     text: 'Glide through knots without snapping your hair.',
     icon: Brush,
     image: `${BASE_PATH}assets/hairbrush.webp`,
+    bigger: true,
   },
   {
     number: '04',
