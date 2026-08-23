@@ -156,7 +156,7 @@ export const TopStoryBanner = () => {
             {[
               {
                 img: `${BASE_PATH}assets/Shampoo1.webp`,
-                label: 'Fulani Hair Gro™ Shampoo',
+                label: 'Fulani Hair Gro™ Shampoo 500ml',
                 heading: 'Why Your Hair Needs Our Shampoo',
                 body: [
                   'You can pour oil on your hair every single day...',
