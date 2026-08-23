@@ -6,6 +6,7 @@ import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
+import { HairProblemsSection } from '@/components/landing/HairProblemsSection';
 import { Footer } from '@/components/landing/Footer';
 // Valentine promo ended
 // import { ValentineCountdown } from '@/components/ValentineCountdown';
@@ -306,6 +307,8 @@ const Index = () => {
       
       <main>
         <TopStoryBanner />
+
+        <HairProblemsSection />
 
         
         
