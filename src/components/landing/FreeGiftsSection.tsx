@@ -23,7 +23,7 @@ const giftItems = [
     sub: '5g',
     text: 'Soothe itching and fight flakes before they build up.',
     icon: Sparkles,
-    image: `${BASE_PATH}assets/itch-no-more.webp`,
+    image: `${BASE_PATH}assets/sample-itchnomore.png`,
   },
   {
     number: '02',
