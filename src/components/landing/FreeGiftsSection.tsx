@@ -87,7 +87,7 @@ const trustItems = [
 function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
   return (
     <div
-      className="relative w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto mb-4 rounded-full flex items-center justify-center overflow-hidden"
+      className="relative w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
