@@ -137,7 +137,7 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6 max-w-3xl mx-auto text-center space-y-4">
           <h2 className="font-black text-2xl md:text-4xl text-black tracking-tight leading-tight">
-            <span className="uppercase">YOUR EDGES WILL LOOK FULL AGAIN.</span>
+            <span className="uppercase">THE COMPLETE SET THAT WILL MAKE YOUR EDGES FULL AGAIN.</span>
             <br />
             <span className="text-2xl md:text-3xl">Grow Longer, Fuller, Healthier-Looking Hair</span>
           </h2>
