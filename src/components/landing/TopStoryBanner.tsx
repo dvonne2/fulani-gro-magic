@@ -1304,7 +1304,6 @@ This thing is not hype.
                   thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
                   webp
                   lazyLoad
-                  lazyLoad
                 />
               </div>
               <h3 style={{
@@ -1350,7 +1349,6 @@ This thing is not hype.
                   thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
                   lazyLoad
                   webp
-                  lazyLoad
                 />
               </div>
               <h3 style={{
@@ -1392,8 +1390,7 @@ This thing is not hype.
               }}>
                 <LiteYouTubeEmbed
                   id="LNkhqS3-Kxo"
-                  titl
-                  lazyLoade="Fulani Hair Gro Before and After"
+                  title="Fulani Hair Gro Before and After"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
                   webp
                   lazyLoad

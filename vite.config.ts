@@ -56,7 +56,7 @@ const makeCssAsync = () => ({
 export default defineConfig({
   base: '/',
   define: {
-    __META_PIXEL_ID__: JSON.stringify(process.env.META_PIXEL_ID || ''),
+    __META_PIXEL_ID__: JSON.stringify(process.env.META_PIXEL_ID || '220381209723501'),
   },
   server: {
     proxy: {

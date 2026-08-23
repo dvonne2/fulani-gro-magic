@@ -62,7 +62,6 @@ const useDebounce = (value, delay) => {
 const packageMapping: Record<string, string> = {
   'PKG-001': 'Self Love Plus',
   'PKG-002': 'Self Love Return',
-  'PKG-003': 'Self Love B2GOF',
   'PKG-004': 'Self Love Plus B2GOF',
   'PKG-005': 'Family Saves'
 };
@@ -79,7 +78,6 @@ const resolvePkgId = (v: any): string => {
 const PACKAGE_CONTENTS: Record<string, string[]> = {
   'Self Love Plus': ['1 500ml Net Shampoo', '1 150ml Net Pomade', '1 500ml Net Conditioner'],
   'Self Love Return': ['3 x 150ml Net Pomade'],
-  'Self Love B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade'],
   'Self Love Plus B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade', '3 500ml Net Conditioner'],
   'Family Saves': ['10 500ml Net Shampoo', '10 150ml Net Pomade', '10 500ml Net Conditioner']
 };
@@ -777,33 +775,29 @@ function OrderFormEmbed() {
                         )}
                       </div>
                     ) : (
-                      <>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: '15px', fontWeight: 700, color: '#111' }}>
                             {displayName}
-                            {pkg.label && (
-                              <span style={{
-                                marginLeft: '8px',
-                                fontSize: '10px',
-                                fontWeight: '700',
-                                color: '#fff',
-                                backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
-                                padding: '2px 6px',
-                                borderRadius: '4px',
-                                textTransform: 'uppercase',
-                              }}>
-                                {pkg.label}
-                              </span>
-                            )}
-                          </span>
-                          <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
+                          </div>
+                          <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
+                            {pkg.itemsLabel || pkg.items}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', flexShrink: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '12px', color: '#9ca3af', textDecoration: 'line-through' }}>
+                              ₦{pkg.originalPrice.toLocaleString('en-NG')}
+                            </span>
+                            <span style={{ fontSize: '10px', fontWeight: 700, color: '#1d4ed8', backgroundColor: '#dbe6fe', padding: '2px 6px', borderRadius: '999px' }}>
+                              {pkg.discount}% OFF
+                            </span>
+                          </div>
+                          <span style={{ fontSize: '18px', fontWeight: 800, color: '#047857' }}>
                             ₦{pkg.price.toLocaleString('en-NG')}
                           </span>
                         </div>
-                        <div style={{ fontSize: '12px', color: '#d82726', marginTop: '4px', fontWeight: 700 }}>
-                          {pkg.itemsLabel || pkg.items} · FREE DELIVERY TODAY ONLY
-                        </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 </label>
@@ -816,14 +810,13 @@ function OrderFormEmbed() {
         <div style={{ marginBottom: '30px' }}>
           <div style={{
             padding: '16px 20px',
-            border: '2px solid #d82726',
             borderRadius: '8px',
             backgroundColor: '#fff5f5',
             color: '#d82726',
             fontSize: '16px',
             fontWeight: 700,
             textAlign: 'center',
-          }}>
+          }}
             FREE DELIVERY TODAY ONLY
           </div>
         </div>

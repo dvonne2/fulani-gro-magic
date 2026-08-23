@@ -30,13 +30,6 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
       { name: "Growth Pomade (150g)", qty: 3, image: pomade },
     ]
   },
-  "Self Love B2GOF": {
-    title: "YOUR 3-MONTH SCALP RESET SUPPLY",
-    items: [
-      { name: "Heritage Shampoo (500ml)", qty: 2, image: shampoo },
-      { name: "Growth Pomade (150g)", qty: 2, image: pomade },
-    ]
-  },
   "Self Love Plus B2GOF": {
     title: "YOUR 3-MONTH RECOVERY SYSTEM SUPPLY",
     items: [
