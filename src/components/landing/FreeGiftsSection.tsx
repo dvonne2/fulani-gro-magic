@@ -32,7 +32,6 @@ const giftItems = [
     text: 'Protect your strands while you sleep.',
     icon: Moon,
     image: `${BASE_PATH}assets/bonnet.jpg`,
-    bigger: true,
   },
   {
     number: '03',
@@ -41,7 +40,6 @@ const giftItems = [
     text: 'Glide through knots without snapping your hair.',
     icon: Brush,
     image: `${BASE_PATH}assets/hairbrush.webp`,
-    bigger: true,
   },
   {
     number: '04',
@@ -50,8 +48,6 @@ const giftItems = [
     text: 'The 7 Major Things I Did to Grow My Hair 22 Inches + How You Can Too!\nBy H. Nasir — The Fulani Hair Gro',
     icon: BookOpen,
     image: `${BASE_PATH}assets/book.png`,
-    large: true,
-    bigger: true,
   },
   {
     number: '05',
@@ -76,7 +72,6 @@ const giftItems = [
     text: 'Try it risk-free for 30 full days.',
     icon: ShieldCheck,
     image: `${BASE_PATH}assets/book4.png`,
-    large: true,
   },
 ];
 
@@ -87,30 +82,16 @@ const trustItems = [
   'WhatsApp Support',
 ];
 
-function GiftImage({
-  src,
-  Icon,
-  bigger = false,
-}: {
-  src: string;
-  Icon: typeof Sparkles;
-  bigger?: boolean;
-}) {
-  const sizeClass = bigger
-    ? 'w-64 h-64 md:w-52 md:h-52'
-    : 'w-48 h-48 md:w-44 md:h-44';
-  const iconSize = bigger
-    ? 'w-20 h-20 md:w-24 md:h-24'
-    : 'w-16 h-16 md:w-20 md:h-20';
+function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
   return (
     <div
-      className={`relative ${sizeClass} mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden`}
+      className="relative w-full h-80 md:h-60 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
         src={src}
         alt=""
-        className="absolute inset-0 w-full h-full object-contain p-1 md:p-2 hidden gift-img"
+        className="absolute inset-0 w-full h-full object-contain p-2 hidden gift-img"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = 'none';
           const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
@@ -126,8 +107,54 @@ function GiftImage({
         className="w-full h-full flex items-center justify-center gift-fallback"
         style={{ color: green }}
       >
-        <Icon className={`${iconSize}`} strokeWidth={1.5} />
+        <Icon className="w-20 h-20 md:w-24 md:h-24" strokeWidth={1.5} />
       </span>
+    </div>
+  );
+}
+
+function GiftCard({
+  gift,
+  className = '',
+}: {
+  gift: (typeof giftItems)[number];
+  className?: string;
+}) {
+  const Icon = gift.icon;
+  return (
+    <div
+      className={[
+        'rounded-2xl p-4 text-center flex flex-col justify-between shadow-lg w-[94%] md:w-full bg-white',
+        className,
+      ].join(' ')}
+      style={{ border: `2px solid ${gold}` }}
+    >
+      <div>
+        <span
+          className="inline-block w-7 h-7 md:w-8 md:h-8 rounded-full text-white font-black text-sm md:text-base leading-7 md:leading-8 mb-2"
+          style={{ backgroundColor: red }}
+        >
+          {gift.number}
+        </span>
+        <GiftImage src={gift.image} Icon={Icon} />
+        <h4
+          className="font-black text-lg md:text-base leading-tight mb-1"
+          style={{ color: green }}
+        >
+          {gift.title}
+        </h4>
+        {gift.sub && (
+          <p
+            className="font-bold text-sm md:text-sm mb-1"
+            style={{ color: red }}
+          >
+            {gift.sub}
+          </p>
+        )}
+        <p className="text-gray-700 text-sm md:text-sm whitespace-pre-line leading-relaxed">
+          {gift.text}
+        </p>
+      </div>
     </div>
   );
 }
@@ -148,7 +175,7 @@ export default function FreeGiftsSection() {
       className="w-full py-12 md:py-20 px-4"
       style={{ backgroundColor: green }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Main heading */}
         <div className="text-center mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 mb-3" style={{ color: gold }}>
@@ -182,50 +209,14 @@ export default function FreeGiftsSection() {
         </div>
 
         {/* Gift grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-4 place-items-center mb-10 md:mb-14">
-          {giftItems.map((gift, idx) => {
-            const Icon = gift.icon;
-            return (
-              <div
-                key={idx}
-                className={[
-                  'rounded-2xl p-4 text-center flex flex-col justify-between shadow-lg w-[94%] md:w-full',
-                  'bg-white',
-                  gift.large ? 'md:col-span-2' : '',
-                ].join(' ')}
-                style={{
-                  border: `2px solid ${gold}`,
-                }}
-              >
-                <div>
-                  <span
-                    className="inline-block w-7 h-7 md:w-8 md:h-8 rounded-full text-white font-black text-sm md:text-base leading-7 md:leading-8 mb-2"
-                    style={{ backgroundColor: red }}
-                  >
-                    {gift.number}
-                  </span>
-                  <GiftImage src={gift.image} Icon={Icon} bigger={gift.bigger} />
-                  <h4
-                    className="font-black text-lg md:text-base leading-tight mb-1"
-                    style={{ color: green }}
-                  >
-                    {gift.title}
-                  </h4>
-                  {gift.sub && (
-                    <p
-                      className="font-bold text-sm md:text-sm mb-1"
-                      style={{ color: red }}
-                    >
-                      {gift.sub}
-                    </p>
-                  )}
-                  <p className="text-gray-700 text-sm md:text-sm whitespace-pre-line leading-relaxed">
-                    {gift.text}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[18px] md:gap-6 place-items-center mb-10 md:mb-14">
+          {giftItems.map((gift, idx) => (
+            <GiftCard
+              key={idx}
+              gift={gift}
+              className={idx === 4 ? 'xl:col-start-2' : ''}
+            />
+          ))}
         </div>
 
         {/* Trust strip */}
