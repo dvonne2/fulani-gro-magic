@@ -74,3 +74,4 @@ assets-backup/
 /favicon.ico
 /placeholder.svg
 /test-loading.html
+.env*

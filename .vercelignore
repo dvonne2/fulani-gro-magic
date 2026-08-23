@@ -17,6 +17,7 @@ logs/
 # Local build output / Vite bundle analysis
 dist/
 dist-ssr/
-lighthouse-report*
-*.html
+
+# Lighthouse reports only, not index.html
+lighthouse-report*.html
 bun.lockb
