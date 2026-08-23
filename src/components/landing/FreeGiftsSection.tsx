@@ -31,7 +31,7 @@ const giftItems = [
     sub: '1',
     text: 'Protect your strands while you sleep.',
     icon: Moon,
-    image: `${BASE_PATH}assets/satin-bonnet.webp`,
+    image: `${BASE_PATH}assets/bonnet.jpg`,
   },
   {
     number: '03',
@@ -39,7 +39,7 @@ const giftItems = [
     sub: '1',
     text: 'Glide through knots without snapping your hair.',
     icon: Brush,
-    image: `${BASE_PATH}assets/detangling-brush.webp`,
+    image: `${BASE_PATH}assets/hairbrush.webp`,
   },
   {
     number: '04',
