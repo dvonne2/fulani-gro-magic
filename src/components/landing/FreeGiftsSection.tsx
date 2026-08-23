@@ -87,13 +87,13 @@ const trustItems = [
 function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
   return (
     <div
-      className="relative w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-full flex items-center justify-center overflow-hidden"
+      className="relative w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto mb-4 rounded-full flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
         src={src}
         alt=""
-        className="absolute inset-0 w-full h-full object-contain p-1 hidden gift-img"
+        className="absolute inset-0 w-full h-full object-contain p-2 hidden gift-img"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = 'none';
           const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
@@ -109,7 +109,7 @@ function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
         className="w-full h-full flex items-center justify-center gift-fallback"
         style={{ color: green }}
       >
-        <Icon className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1.5} />
+        <Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={1.5} />
       </span>
     </div>
   );
