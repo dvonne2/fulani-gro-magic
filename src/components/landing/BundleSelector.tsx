@@ -120,41 +120,84 @@ export const BundleSelector = () => {
             {pkg.isPopular && <span className="badge">★ Best Deal</span>}
             {pkg.label && <p className="tier">{pkg.label}</p>}
             <h2 className="pkg">{pkg.displayName || pkg.name}</h2>
-            <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
-            <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
-            {pkg.deliveryFee > 0 && (
-              <p style={{ textAlign: 'center', fontSize: '13px', color: '#6B5638', marginTop: '4px' }}>
-                Product: ₦{pkg.price.toLocaleString()} + Delivery: ₦{pkg.deliveryFee.toLocaleString()} · Total payable: ₦{(pkg.price + pkg.deliveryFee).toLocaleString()}
-              </p>
+            {pkg.id === 'PKG-004' ? (
+              <>
+                <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em', color: '#A87A10', textTransform: 'uppercase', margin: '8px 0 6px' }}>
+                  BUY 2, GET 1 FREE
+                </p>
+                <ul style={{ listStyle: 'none', margin: '0 0 12px', padding: 0, textAlign: 'left', fontSize: '13px', lineHeight: '1.5', color: '#4A3A24' }}>
+                  {pkg.offerBullets?.map((b, i) => (
+                    <li key={i} style={{ padding: '5px 0', borderBottom: i < (pkg.offerBullets?.length || 0) - 1 ? '1px solid #F2EAD8' : 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ color: '#C9971C', fontWeight: 700 }}>✦</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ background: '#FFFBF3', border: '1.5px solid #EADFC8', borderRadius: 10, padding: '10px 12px', margin: '0 0 14px', width: '100%', boxSizing: 'border-box' }}>
+                  {pkg.valueBreakdown?.map((row, i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10,
+                      padding: '7px 0', borderBottom: i < (pkg.valueBreakdown?.length || 0) - 1 ? '1px solid #EADFC8' : 'none',
+                      fontSize: '13px', color: row.strong ? '#92400E' : '#4A3A24',
+                      fontWeight: row.strong ? 700 : 500,
+                      background: row.strong ? 'linear-gradient(90deg,#FEF3C7,#FFF7ED)' : 'transparent',
+                      margin: '0 -12px', paddingLeft: 12, paddingRight: 12,
+                    }}>
+                      <span style={{ flex: '1 1 auto', minWidth: 0, lineHeight: 1.4 }}>{row.label}</span>
+                      <span style={{ flex: '0 0 auto', whiteSpace: 'nowrap', fontWeight: row.strong ? 800 : 600, fontVariantNumeric: 'tabular-nums' }}>{formatPrice(row.amount)}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="was" style={{ marginTop: 0 }}><span className="naira">₦</span>{formatPrice(pkg.referencePrice || pkg.originalPrice).replace('₦', '')}</p>
+                <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
+                <span className="save" style={{ background: '#FEF3C7', color: '#92400E', fontSize: '12px', padding: '5px 14px' }}>
+                  YOU SAVE {formatPrice((pkg.referencePrice || pkg.originalPrice) - pkg.price).replace('₦', '')}
+                </span>
+                {pkg.tagline && (
+                  <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 800, color: '#166534', marginTop: '10px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    {pkg.tagline}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
+                <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
+                {pkg.deliveryFee > 0 && (
+                  <p style={{ textAlign: 'center', fontSize: '13px', color: '#6B5638', marginTop: '4px' }}>
+                    Product: ₦{pkg.price.toLocaleString()} + Delivery: ₦{pkg.deliveryFee.toLocaleString()} · Total payable: ₦{(pkg.price + pkg.deliveryFee).toLocaleString()}
+                  </p>
+                )}
+                <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
+                <div className="product-imgs">
+                  {getProductQty(pkg.items, 'shampoo') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={shampooImg} alt="Shampoo" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'shampoo') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'shampoo')}</span>}
+                    </span>
+                  )}
+                  {getProductQty(pkg.items, 'pomade') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={pomadeImg} alt="Pomade" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'pomade') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'pomade')}</span>}
+                    </span>
+                  )}
+                  {getProductQty(pkg.items, 'conditioner') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={conditionerImg} alt="Conditioner" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'conditioner') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'conditioner')}</span>}
+                    </span>
+                  )}
+                </div>
+                <ul>
+                  <li><strong>{pkg.items}</strong></li>
+                  {pkg.freeItems && <li>{pkg.freeItems}</li>}
+                  <li><strong>90-day money-back guarantee</strong></li>
+                  <li>Nationwide delivery</li>
+                  <li>Pay on delivery</li>
+                </ul>
+              </>
             )}
-            <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
-            <div className="product-imgs">
-              {getProductQty(pkg.items, 'shampoo') > 0 && (
-                <span className="product-img-wrap">
-                  <img src={shampooImg} alt="Shampoo" width="60" height="60" loading="lazy" decoding="async" />
-                  {getProductQty(pkg.items, 'shampoo') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'shampoo')}</span>}
-                </span>
-              )}
-              {getProductQty(pkg.items, 'pomade') > 0 && (
-                <span className="product-img-wrap">
-                  <img src={pomadeImg} alt="Pomade" width="60" height="60" loading="lazy" decoding="async" />
-                  {getProductQty(pkg.items, 'pomade') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'pomade')}</span>}
-                </span>
-              )}
-              {getProductQty(pkg.items, 'conditioner') > 0 && (
-                <span className="product-img-wrap">
-                  <img src={conditionerImg} alt="Conditioner" width="60" height="60" loading="lazy" decoding="async" />
-                  {getProductQty(pkg.items, 'conditioner') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'conditioner')}</span>}
-                </span>
-              )}
-            </div>
-            <ul>
-              <li><strong>{pkg.items}</strong></li>
-              {pkg.freeItems && <li>{pkg.freeItems}</li>}
-              <li><strong>90-day money-back guarantee</strong></li>
-              <li>Nationwide delivery</li>
-              <li>Pay on delivery</li>
-            </ul>
             <a className="cta" href={`#order-form?package=${pkg.slug}`}>Order Now{pkg.isPopular ? ' — Best Deal' : ''}</a>
           </section>
         ))}
