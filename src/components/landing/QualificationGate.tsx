@@ -126,7 +126,7 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
             className="w-full border-gold/40 text-gold hover:bg-gold/10 font-sans text-sm tracking-widest uppercase py-6"
           >
             <span className="mr-2">🛒</span>
-            Order Now — ₦66,750
+            Order Now — ₦55,950
           </Button>
         </div>
       </div>

@@ -79,7 +79,7 @@ export const PACKAGES: Package[] = [
     id: 'PKG-004',
     slug: 'self_love_plus_b2gof',
     name: 'Self Love Plus B2GOF',
-    price: 66750,
+    price: 55950,
     originalPrice: 133500,
     discount: 50,
     items: '3 x 500ml Heritage Shampoos + 3 x 150ml Growth Pomades + 3 x 500ml Voluminous Conditioners',
@@ -99,12 +99,12 @@ export const PACKAGES: Package[] = [
     ],
     badges: [
       { text: 'Best deal', tone: 'accent' },
-      { text: 'Save ₦15,600', tone: 'success' },
+      { text: 'Save ₦26,400', tone: 'success' },
     ],
     referencePrice: 82350,
     valueBreakdown: [
       { label: '2 complete sets', amount: 54900 },
-      { label: 'Add just', amount: 11850 },
+      { label: 'Add just', amount: 1050 },
       { label: 'Get 3rd complete set FREE — Worth', amount: 27450, strong: true },
     ],
     tagline: 'FREE DELIVERY TODAY ONLY',

@@ -95,7 +95,7 @@ function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
 
 // ─── ItemRow ──────────────────────────────────────────────────────────────────
 function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
-  // STYLE 1: Red Ribbon for PKG-004 (Self Love Plus B2GOF / ₦66,750)
+  // STYLE 1: Red Ribbon for PKG-004 (Self Love Plus B2GOF / ₦55,950)
   // STYLE 2: Solid Green Pill for PKG-005 (Family Saves / ₦215,000)
   const isPremiumBundle = bundleId === 'PKG-004';
   const isGreenPillBundle = bundleId === 'PKG-005';

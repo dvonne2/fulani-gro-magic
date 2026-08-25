@@ -198,7 +198,7 @@ export const BundleSection = () => {
           
           <div className="flex items-center justify-center gap-4 mb-6">
             <span className="text-muted-foreground/80 line-through text-lg">₦214,500</span>
-            <span className="font-cinzel text-4xl md:text-5xl text-gold animate-shimmer">₦66,750</span>
+            <span className="font-cinzel text-4xl md:text-5xl text-gold animate-shimmer">₦55,950</span>
             <span className="px-3 py-1 bg-[#B80F66]/20 text-[#B80F66] text-sm font-bold rounded-full">SAVE ₦147,750</span>
           </div>
           
@@ -223,7 +223,7 @@ export const BundleSection = () => {
               <span className="text-[#B80F66]">✓</span> 365-Day Guarantee
             </span>
             <span className="flex items-center gap-2">
-              <span className="text-[#B80F66]">✓</span> Free Shipping on ₦66,750 &amp; ₦215,000 bundles (pay before delivery orders only)
+              <span className="text-[#B80F66]">✓</span> Free Shipping on ₦55,950 &amp; ₦215,000 bundles (pay before delivery orders only)
             </span>
           </div>
         </div>
