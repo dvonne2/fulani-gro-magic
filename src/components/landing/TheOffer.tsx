@@ -26,7 +26,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
     {
       icon: "✨",
       title: "FREE Express Shipping (pay before delivery orders only)",
-      description: "On ₦55,950 & ₦215,000 bundles only"
+      description: "On ₦55,950 & ₦180,800 bundles only"
     },
   ];
 

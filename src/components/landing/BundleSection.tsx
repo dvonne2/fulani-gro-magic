@@ -223,7 +223,7 @@ export const BundleSection = () => {
               <span className="text-[#B80F66]">✓</span> 365-Day Guarantee
             </span>
             <span className="flex items-center gap-2">
-              <span className="text-[#B80F66]">✓</span> Free Shipping on ₦55,950 &amp; ₦215,000 bundles (pay before delivery orders only)
+              <span className="text-[#B80F66]">✓</span> Free Shipping on ₦55,950 &amp; ₦180,800 bundles (pay before delivery orders only)
             </span>
           </div>
         </div>

@@ -106,7 +106,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "Family Saves",
-      price: "₦215,000",
+      price: "₦180,800",
       promo: "",
       savings: "",
       contents: "6+4 of each product",
@@ -183,7 +183,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         </div>
         
         <p className="text-xl text-[#333333]">
-          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦55,950 &amp; ₦215,000 bundles (pay before delivery orders only)
+          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦55,950 &amp; ₦180,800 bundles (pay before delivery orders only)
         </p>
       </div>
     </section>
