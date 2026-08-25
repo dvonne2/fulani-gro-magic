@@ -79,7 +79,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "SELF 💕 RETURN",
-      price: "₦42,750",
+      price: "₦39,900",
       promo: "",
       savings: "",
       contents: "3× Pomade",
@@ -88,7 +88,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "SELF 💕 B2GOF",
-      price: "₦52,750",
+      price: "₦39,900",
       promo: "",
       savings: "",
       contents: "2× Shampoo, 2× Pomade, 2× Conditioner",
