@@ -4,7 +4,7 @@ const bundle = {
   name: "Complete Hair Growth System",
   subtitle: "The 30-Day Test",
   priceWas: "₦65,500",
-  priceNow: "₦32,750",
+  priceNow: "₦27,450",
   discount: "50% OFF",
   tag: "New Customer Trial",
   items: [

@@ -120,7 +120,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
               </p>
               <div className="flex items-center justify-center lg:justify-start gap-3">
                 <span className="font-sans text-xl text-muted-foreground line-through">₦71,500</span>
-                <span className="font-cinzel text-3xl md:text-4xl text-gold font-semibold">₦32,750</span>
+                <span className="font-cinzel text-3xl md:text-4xl text-gold font-semibold">₦27,450</span>
                 <span className="px-2 py-1 bg-destructive text-foreground text-sm font-bold rounded">-54%</span>
               </div>
             </div>

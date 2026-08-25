@@ -70,7 +70,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
   const originalBundles = [
     {
       name: "SELF 💕 PLUS",
-      price: "₦32,750",
+      price: "₦27,450",
       promo: "",
       savings: "",
       contents: "1 Shampoo, 1 Pomade, 1 Conditioner",

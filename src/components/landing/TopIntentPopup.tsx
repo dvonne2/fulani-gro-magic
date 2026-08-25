@@ -141,7 +141,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                       New Price
                     </p>
                     <p className="text-2xl md:text-4xl font-black text-gold">
-                      ₦32,750
+                      ₦27,450
                     </p>
                   </div>
                 </div>
