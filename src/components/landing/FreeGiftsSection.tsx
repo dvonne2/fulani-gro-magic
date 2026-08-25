@@ -252,6 +252,12 @@ export default function FreeGiftsSection() {
           >
             GET MY FREE GIFTS + FULANI HAIR GRO
           </a>
+          <p
+            className="mt-3 text-xs md:text-sm font-bold uppercase tracking-wider"
+            style={{ color: '#ffffff' }}
+          >
+            FREE GIFTS AVAILABLE WHILE GIFT STOCKS LAST
+          </p>
         </div>
       </div>
     </section>
