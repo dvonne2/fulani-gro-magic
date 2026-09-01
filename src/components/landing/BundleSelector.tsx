@@ -133,6 +133,26 @@ export const BundleSelector = () => {
                     </li>
                   ))}
                 </ul>
+                <div className="product-imgs" style={{ margin: '0 0 14px' }}>
+                  {getProductQty(pkg.items, 'shampoo') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={shampooImg} alt="Shampoo" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'shampoo') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'shampoo')}</span>}
+                    </span>
+                  )}
+                  {getProductQty(pkg.items, 'pomade') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={pomadeImg} alt="Pomade" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'pomade') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'pomade')}</span>}
+                    </span>
+                  )}
+                  {getProductQty(pkg.items, 'conditioner') > 0 && (
+                    <span className="product-img-wrap">
+                      <img src={conditionerImg} alt="Conditioner" width="60" height="60" loading="lazy" decoding="async" />
+                      {getProductQty(pkg.items, 'conditioner') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'conditioner')}</span>}
+                    </span>
+                  )}
+                </div>
                 <div style={{ background: '#FFFBF3', border: '1.5px solid #EADFC8', borderRadius: 10, padding: '10px 12px', margin: '0 0 14px', width: '100%', boxSizing: 'border-box' }}>
                   {pkg.valueBreakdown?.map((row, i) => (
                     <div key={i} style={{
