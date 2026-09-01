@@ -70,7 +70,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
   const originalBundles = [
     {
       name: "SELF 💕 PLUS",
-      price: "₦27,450",
+      price: "₦32,750",
       promo: "",
       savings: "",
       contents: "1 Shampoo, 1 Pomade, 1 Conditioner",
@@ -79,7 +79,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "SELF 💕 RETURN",
-      price: "₦39,900",
+      price: "₦42,750",
       promo: "",
       savings: "",
       contents: "3× Pomade",
@@ -88,7 +88,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "SELF 💕 B2GOF",
-      price: "₦39,900",
+      price: "₦52,750",
       promo: "",
       savings: "",
       contents: "2× Shampoo, 2× Pomade, 2× Conditioner",
@@ -97,7 +97,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "SELF 💕 PLUS B2GOF",
-      price: "₦55,950",
+      price: "₦66,750",
       promo: "",
       savings: "",
       contents: "2× Shampoo | 2× Pomade | 2× Conditioner",
@@ -106,7 +106,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "Family Saves",
-      price: "₦180,800",
+      price: "₦215,000",
       promo: "",
       savings: "",
       contents: "6+4 of each product",
@@ -183,7 +183,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         </div>
         
         <p className="text-xl text-[#333333]">
-          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦55,950 &amp; ₦180,800 bundles (pay before delivery orders only)
+          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦66,750 &amp; ₦215,000 bundles (pay before delivery orders only)
         </p>
       </div>
     </section>
