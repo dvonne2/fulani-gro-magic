@@ -53,6 +53,47 @@ const makeCssAsync = () => ({
   }
 });
 
+// Strip unnecessary modulepreload tags from built HTML.
+// Vite emits <link rel="modulepreload"> for EVERY chunk, which defeats code
+// splitting — the browser downloads ThankYou, ReviewsList, FAQ etc. even though
+// the visitor won’t need them on first load.  We keep only the entry + vendor
+// chunks that are genuinely needed for initial render.
+const pruneModulePreloads = () => ({
+  name: 'prune-modulepreloads',
+  closeBundle() {
+    const indexPath = path.resolve(__dirname, 'dist', 'index.html');
+    if (!fs.existsSync(indexPath)) return;
+
+    let html = fs.readFileSync(indexPath, 'utf-8');
+
+    // Keep modulepreloads only for entry, vendor and main chunks.
+    // Remove preloads for lazy route chunks and below-fold component chunks.
+    const keepPatterns = [
+      /main-/,
+      /react-vendor-/,
+      /router-/,
+      /query-/,
+    ];
+
+    html = html.replace(
+      /<link\s+rel="modulepreload"[^>]*href="([^"]*)"[^>]*>/g,
+      (match, href) => {
+        // Keep if the chunk name matches a critical pattern
+        if (keepPatterns.some(p => p.test(href))) {
+          return match;
+        }
+        // Remove the preload — the chunk will still load on demand
+        return '';
+      }
+    );
+
+    // Clean up any double-newlines left by removals
+    html = html.replace(/\n{3,}/g, '\n\n');
+
+    fs.writeFileSync(indexPath, html);
+  }
+});
+
 export default defineConfig({
   base: '/',
   define: {
@@ -74,6 +115,7 @@ export default defineConfig({
     partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }),
     react(),
     copyCriticalFiles(),
+    pruneModulePreloads(),
     // makeCssAsync(), // Disabled - SSG script handles async CSS
     visualizer({
       filename: 'dist/stats.html',
