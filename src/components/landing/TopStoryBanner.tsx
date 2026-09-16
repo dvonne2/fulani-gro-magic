@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState, useRef } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
@@ -38,6 +38,25 @@ import FreeGiftsSection from './FreeGiftsSection';
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const afterHero = useAfterHeroLoad();
+
+  const [showReviews, setShowReviews] = useState(false);
+  const reviewsSentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = reviewsSentinelRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowReviews(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
@@ -625,11 +644,13 @@ export const TopStoryBanner = () => {
             </div>
 
             {/* Approved Reviews from Supabase */}
-            {afterHero && (
-              <Suspense fallback={null}>
-                <ReviewsList />
-              </Suspense>
-            )}
+            <div ref={reviewsSentinelRef}>
+              {showReviews && (
+                <Suspense fallback={null}>
+                  <ReviewsList />
+                </Suspense>
+              )}
+            </div>
         </div>
 
         {/* ORDER FORM */}
