@@ -78,22 +78,10 @@ async function ssg() {
     writeFileSync(DIST_INDEX, html, 'utf-8');
     console.log(`[ssg] Wrote pre-rendered index.html (${(html.length / 1024).toFixed(1)} KB total)`);
 
-    // Re-apply async CSS pattern after SSG (SSG overwrites the plugin's changes)
+    // Keep main CSS render-blocking to prevent CLS (async CSS caused 0.237 CLS from
+    // unstyled→styled reflow). The CSS is small enough (~90KB) that blocking is fine,
+    // and the browser already discovers it from the <link> in <head>.
     html = readFileSync(DIST_INDEX, 'utf-8');
-    // Extract the main.css path first before removing anything
-    const mainCssMatch = html.match(/<link[^>]*href="(\/assets\/main-[^"]+\.css)"[^>]*>/);
-    if (mainCssMatch) {
-      const cssPath = mainCssMatch[1];
-      // Remove ALL existing main.css links (both blocking and async) to prevent duplication
-      html = html.replace(
-        /<link[^>]*href="\/assets\/main-[^"]+\.css"[^>]*>.*?(<\/noscript>)?/gs,
-        ''
-      );
-      // Insert a single clean async pattern with an id so main.tsx can wait for it
-      const asyncCss = `<link id="main-css" rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
-      // Insert before </head>
-      html = html.replace('</head>', asyncCss + '\n    </head>');
-    }
 
     // Inject modulepreload hints for the entry and react-vendor chunks so the browser
     // does not need to discover them via the main module's import graph.
