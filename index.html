@@ -25,6 +25,11 @@
     <link rel="icon" type="image/webp" href="/assets/favicon.webp" />
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
 
+    <!-- Preconnect to third-party origins (DNS + TLS handshake starts early) -->
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="preconnect" href="https://www.facebook.com" crossorigin />
+    <link rel="preconnect" href="https://analytics.tiktok.com" crossorigin />
+
     <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Critical above-the-fold CSS (urgency banner + hero) -->
@@ -192,13 +197,21 @@
       }(window, document, 'ttq');
     </script>
 
+    <!-- Defer analytics loading until after page is interactive.
+         The TikTok stub above queues any events fired before this loads,
+         so no tracking data is lost. We just delay the network download. -->
     <script>
       (function () {
         function loadAnalytics() {
-          var s = document.createElement('script');
-          s.src = '/analytics-deferred.js';
-          s.async = true;
-          document.body.appendChild(s);
+          // Wait 2 seconds AFTER DOMContentLoaded to let the page become
+          // interactive before downloading TikTok's events.js (~100KB).
+          // The stub above queues all events in the meantime — nothing is lost.
+          setTimeout(function() {
+            var s = document.createElement('script');
+            s.src = '/analytics-deferred.js';
+            s.async = true;
+            document.body.appendChild(s);
+          }, 2000);
         }
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', loadAnalytics);
