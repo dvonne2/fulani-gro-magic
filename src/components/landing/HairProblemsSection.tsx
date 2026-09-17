@@ -48,6 +48,8 @@ export const HairProblemsSection = () => {
                 className="w-full h-full object-cover"
                 loading="lazy"
                 decoding="async"
+                width={800}
+                height={409}
               />
               <div
                 className="absolute bottom-0 inset-x-0 py-3 md:py-4 text-center"
