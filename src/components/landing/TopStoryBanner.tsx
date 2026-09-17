@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
+import React, { lazy, Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
@@ -40,6 +40,30 @@ export const TopStoryBanner = () => {
   const afterHero = useAfterHeroLoad();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
+  const reviewsSentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // Lazy-load ReviewsList only when the sentinel scrolls into view
+  useEffect(() => {
+    if (showReviews) return;
+    const el = reviewsSentinelRef.current;
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) {
+      setShowReviews(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowReviews(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '400px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [showReviews]);
 
   useEffect(() => {
     if (!afterHero) return;
@@ -625,11 +649,13 @@ export const TopStoryBanner = () => {
             </div>
 
             {/* Approved Reviews from Supabase */}
-            {afterHero && (
-              <Suspense fallback={null}>
-                <ReviewsList />
-              </Suspense>
-            )}
+            <div ref={reviewsSentinelRef}>
+              {showReviews && (
+                <Suspense fallback={null}>
+                  <ReviewsList />
+                </Suspense>
+              )}
+            </div>
         </div>
 
         {/* ORDER FORM */}

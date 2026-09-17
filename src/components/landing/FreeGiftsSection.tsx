@@ -9,6 +9,7 @@ import {
   Check,
   Gift,
 } from 'lucide-react';
+import { useRef, useEffect } from 'react';
 
 const BASE_PATH = (import.meta as any).env?.BASE_URL || '/';
 
@@ -23,7 +24,7 @@ const giftItems = [
     sub: '5g',
     text: 'Soothe itching and fight flakes before they build up.',
     icon: Sparkles,
-    image: `${BASE_PATH}assets/sample-itchnomore.png`,
+    image: `${BASE_PATH}assets/sample-itchnomore.webp`,
   },
   {
     number: '02',
@@ -31,7 +32,7 @@ const giftItems = [
     sub: '1',
     text: 'Protect your strands while you sleep.',
     icon: Moon,
-    image: `${BASE_PATH}assets/bonnet.jpg`,
+    image: `${BASE_PATH}assets/bonnet.webp`,
   },
   {
     number: '03',
@@ -47,7 +48,7 @@ const giftItems = [
     sub: '',
     text: 'The 7 Major Things I Did to Grow My Hair 22 Inches + How You Can Too!\nBy H. Nasir — The Fulani Hair Gro',
     icon: BookOpen,
-    image: `${BASE_PATH}assets/book.png`,
+    image: `${BASE_PATH}assets/book.webp`,
   },
   {
     number: '05',
@@ -55,7 +56,7 @@ const giftItems = [
     sub: '',
     text: 'A simple daily routine you can stick to.',
     icon: BookText,
-    image: `${BASE_PATH}assets/book2.png`,
+    image: `${BASE_PATH}assets/book2.webp`,
   },
   {
     number: '06',
@@ -63,7 +64,7 @@ const giftItems = [
     sub: '',
     text: 'Direct help while you use your products.',
     icon: MessageCircle,
-    image: `${BASE_PATH}assets/book3.png`,
+    image: `${BASE_PATH}assets/book3.webp`,
   },
   {
     number: '07',
@@ -71,7 +72,7 @@ const giftItems = [
     sub: '',
     text: 'Try it risk-free for 30 full days.',
     icon: ShieldCheck,
-    image: `${BASE_PATH}assets/book4.png`,
+    image: `${BASE_PATH}assets/book4.webp`,
   },
 ];
 
@@ -83,22 +84,40 @@ const trustItems = [
 ];
 
 function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Fix SSG/hydration race: if the image loaded before React hydrated,
+  // the onLoad handler never fires. Check on mount and show it manually.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      img.style.opacity = '1';
+      const fallback = img.nextElementSibling as HTMLElement | null;
+      if (fallback) fallback.style.display = 'none';
+    }
+  }, []);
+
   return (
     <div
       className="relative w-full h-80 md:h-60 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
     >
       <img
+        ref={imgRef}
         src={src}
         alt=""
-        className="absolute inset-0 w-full h-full object-contain p-2 hidden gift-img"
+        loading="lazy"
+        width={400}
+        height={400}
+        className="absolute inset-0 w-full h-full object-contain p-2 gift-img"
+        style={{ opacity: 0, transition: 'opacity 0.3s' }}
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = 'none';
           const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
           if (fallback) fallback.style.display = 'flex';
         }}
         onLoad={(e) => {
-          (e.currentTarget as HTMLImageElement).classList.remove('hidden');
+          (e.currentTarget as HTMLImageElement).style.opacity = '1';
           const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
           if (fallback) fallback.style.display = 'none';
         }}
