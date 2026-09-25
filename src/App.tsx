@@ -5,7 +5,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
 import Index from "./pages/Index";
-import { meta } from "@/utils/metaTracking";
+import { firePageViewCapi } from "@/utils/metaTracking";
 
 // Valentine promo ended - components hidden
 // import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
@@ -30,7 +30,9 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    meta.firePageView().catch((err) => console.error('[App] firePageView failed:', err));
+    // Browser PageView fires from index.html <head> before React loads.
+    // Here we only send the CAPI PageView with the same eventID for deduplication.
+    firePageViewCapi().catch((err) => console.error('[App] firePageViewCapi failed:', err));
   }, []);
 
   return (

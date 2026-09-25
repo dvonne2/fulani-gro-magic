@@ -95,6 +95,7 @@
   display: inline-block;
   margin-left: 8px;
   animation: arrow-bounce 2s ease-in-out infinite;
+  will-change: transform;
 }
 
 .arrow-indicator::after {

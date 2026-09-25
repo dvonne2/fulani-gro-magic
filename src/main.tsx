@@ -23,7 +23,9 @@ if (splash) splash.remove();
 
 // Remove the inline fallback <style> only after the external main CSS has loaded,
 // so the pre-rendered content is never left unstyled.
-const splashStyle = rootEl.querySelector("style");
+// Only match a DIRECT child of #root (the fallback slot) — never nested,
+// React-rendered <style> tags inside the app (e.g. the hero CTA keyframes).
+const splashStyle = rootEl.querySelector(":scope > style");
 const removeFallbackStyles = () => {
   if (splashStyle) splashStyle.remove();
 };
@@ -35,10 +37,14 @@ if (mainCss && mainCss.rel !== "stylesheet") {
   removeFallbackStyles();
 }
 
-// Hydrate the SSG pre-rendered HTML
-hydrateRoot(rootEl, <App />, {
-  onRecoverableError(error) {
-    // Suppress hydration mismatch warnings in production
-    if (import.meta.env.DEV) console.warn('Hydration error:', error);
-  },
-});
+// Hydrate the SSG pre-rendered HTML.
+// Yield to the browser first so the prerendered LCP image can paint before
+// React's synchronous hydration blocks the main thread.
+setTimeout(() => {
+  hydrateRoot(rootEl, <App />, {
+    onRecoverableError(error) {
+      // Suppress hydration mismatch warnings in production
+      if (import.meta.env.DEV) console.warn('Hydration error:', error);
+    },
+  });
+}, 0);

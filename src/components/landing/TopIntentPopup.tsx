@@ -121,7 +121,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                     </p>
                     <div className="relative inline-block px-1">
                       <p className="text-2xl md:text-3xl line-through text-white">
-                        ₦45,750
+                        ₦48,750
                       </p>
                       {/* Red X cross over old price */}
                       <span
@@ -141,7 +141,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                       New Price
                     </p>
                     <p className="text-2xl md:text-4xl font-black text-gold">
-                      ₦32,750
+                      ₦35,750
                     </p>
                   </div>
                 </div>

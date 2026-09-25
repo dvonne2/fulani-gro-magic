@@ -3,8 +3,8 @@ import { useState } from "react";
 const bundle = {
   name: "Complete Hair Growth System",
   subtitle: "The 30-Day Test",
-  priceWas: "₦65,500",
-  priceNow: "₦32,750",
+  priceWas: "₦71,500",
+  priceNow: "₦35,750",
   discount: "50% OFF",
   tag: "New Customer Trial",
   items: [

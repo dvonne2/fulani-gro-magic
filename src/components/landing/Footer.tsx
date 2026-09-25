@@ -55,6 +55,7 @@ export const Footer = () => {
             background-size: 200% 100%;
             background-position: center center;
             transition: transform 0.3s ease;
+            will-change: transform;
           }
           
           .footer-shine-effect {

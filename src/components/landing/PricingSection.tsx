@@ -14,63 +14,11 @@ interface PricingSectionProps {
 
 export const PricingSection = ({ countdown, stockCount, commitmentChecks, onCommitmentChange }: PricingSectionProps) => {
   const location = useLocation();
-  // Valentine promo ended - use original bundles only
-  const isValentineRoute = false;
-  
-  // Original bundles
-  const valentineBundles = [
+  // Expired Valentine/Salah promo array removed. Current normal prices only.
+  const bundles = [
     {
-      name: "SELF 💕 PLUS",
-      price: "₦27,450",
-      promo: "40% OFF",
-      savings: "",
-      contents: "1 Shampoo, 1 Pomade, 1 Conditioner",
-      bestFor: "New Customers (Trial)",
-      popular: false
-    },
-    {
-      name: "SELF 💕 RETURN",
+      name: "Self Love Plus",
       price: "₦35,750",
-      promo: "43% OFF",
-      savings: "",
-      contents: "3× Pomade",
-      bestFor: "Returning Fans",
-      popular: false
-    },
-    {
-      name: "SELF 💕 B2GOF",
-      price: "₦48,750",
-      promo: "52% OFF",
-      savings: "",
-      contents: "2+1 Shampoo, 2+1 Pomade",
-      bestFor: "Value Seekers",
-      popular: false
-    },
-    {
-      name: "SELF 💕 PLUS B2GOF",
-      price: "₦58,750",
-      promo: "60% OFF",
-      savings: "",
-      contents: "2× Shampoo | 2× Pomade | 2× Conditioner",
-      bestFor: "Most Popular",
-      popular: true
-    },
-    {
-      name: "Family Saves",
-      price: "₦199,000",
-      promo: "35% OFF",
-      savings: "",
-      contents: "6+4 of each product",
-      bestFor: "Bulk/Group Buying",
-      popular: false
-    }
-  ];
-
-  // Original prices for main site
-  const originalBundles = [
-    {
-      name: "SELF 💕 PLUS",
-      price: "₦32,750",
       promo: "",
       savings: "",
       contents: "1 Shampoo, 1 Pomade, 1 Conditioner",
@@ -78,8 +26,8 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       popular: false
     },
     {
-      name: "SELF 💕 RETURN",
-      price: "₦42,750",
+      name: "Self Love Return",
+      price: "₦45,750",
       promo: "",
       savings: "",
       contents: "3× Pomade",
@@ -87,17 +35,8 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       popular: false
     },
     {
-      name: "SELF 💕 B2GOF",
-      price: "₦52,750",
-      promo: "",
-      savings: "",
-      contents: "2× Shampoo, 2× Pomade, 2× Conditioner",
-      bestFor: "Value Seekers",
-      popular: false
-    },
-    {
-      name: "SELF 💕 PLUS B2GOF",
-      price: "₦66,750",
+      name: "Self Love Plus B2GOF",
+      price: "₦69,750",
       promo: "",
       savings: "",
       contents: "2× Shampoo | 2× Pomade | 2× Conditioner",
@@ -106,7 +45,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     },
     {
       name: "Family Saves",
-      price: "₦215,000",
+      price: "₦218,750",
       promo: "",
       savings: "",
       contents: "6+4 of each product",
@@ -114,8 +53,6 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       popular: false
     }
   ];
-
-  const bundles = originalBundles; // Always use original bundles
 
   return (
     <section id="order" className="py-16 px-4 text-center bg-[#F9F9F9]">
@@ -183,7 +120,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         </div>
         
         <p className="text-xl text-[#333333]">
-          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦66,750 &amp; ₦215,000 bundles (pay before delivery orders only)
+          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦69,750 &amp; ₦218,750 bundles (pay before delivery orders only)
         </p>
       </div>
     </section>

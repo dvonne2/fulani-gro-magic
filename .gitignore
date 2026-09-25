@@ -75,3 +75,7 @@ assets-backup/
 /placeholder.svg
 /test-loading.html
 .env*
+
+# Phase-0 audit artifacts
+inspect-sheet.tmp.mjs
+test-results/

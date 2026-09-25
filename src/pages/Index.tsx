@@ -289,7 +289,7 @@ const Index = () => {
   return (
     <>
       <StickyPayOnDeliveryBar />
-      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div className="bg-background text-foreground overflow-x-hidden">
       
       {/* Footer sticky bar temporarily hidden */}
       {false && mounted && afterHero && (

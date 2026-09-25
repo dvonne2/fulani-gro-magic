@@ -1,24 +1,48 @@
-import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-const ReviewForm = lazy(() =>
-  import('@/components/reviews/ReviewForm').then((m) => ({ default: m.ReviewForm }))
-);
+const LiteYouTubePlayer = lazy(() => import('./LiteYouTubePlayer'));
+const ReviewDialog = lazy(() => import('./ReviewDialog'));
 const ReviewsList = lazy(() =>
   import('@/components/reviews/ReviewsList').then((m) => ({ default: m.ReviewsList }))
 );
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
+
+// Load reviews only when they approach the viewport
+function LazyReviews() {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '400px', threshold: 0 }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    }
+    setVisible(true);
+  }, []);
+
+  return (
+    <div ref={ref} className="min-h-[600px]">
+      {visible && (
+        <Suspense fallback={<div className="py-8 text-center text-gray-500">Loading reviews...</div>}>
+          <ReviewsList />
+        </Suspense>
+      )}
+    </div>
+  );
+}
 
 // Lazy load heavy images - they're below the fold
 const fulaniDaysImage = `${BASE_PATH}assets/Gemini_Generated_Image_1knotm1knotm1kno-700.webp`;
@@ -39,7 +63,6 @@ export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const afterHero = useAfterHeroLoad();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
-  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!afterHero) return;
@@ -84,7 +107,10 @@ export const TopStoryBanner = () => {
 
       <div className="mx-auto text-center">
         {/* Bundle Image */}
-        <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl aspect-[1055/1491] bg-gray-50">
+        <div
+          className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl bg-gray-50"
+          style={{ aspectRatio: '1055 / 1491' }}
+        >
           <picture className="block w-full">
             <source
               media="(max-width: 767px)"
@@ -94,7 +120,8 @@ export const TopStoryBanner = () => {
             <img
               src={`${BASE_PATH}assets/newhero.webp`}
               alt="Product Bundle"
-              className="w-full h-auto object-contain"
+              className="block w-full h-auto object-contain"
+              style={{ aspectRatio: '1055 / 1491' }}
               loading="eager"
               fetchpriority="high"
               decoding="async"
@@ -108,10 +135,10 @@ export const TopStoryBanner = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#FF0000] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow aggressive-cta"
-            style={{ fontSize: '20px' }}
+            className="flex items-center justify-center gap-2 bg-[#FF0000] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full min-h-[60px] whitespace-nowrap cta-with-arrow aggressive-cta"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#FF0000', color: '#fff', minHeight: '60px', width: '100%', padding: '16px 40px', borderRadius: '12px', fontSize: '20px', lineHeight: '1.2', whiteSpace: 'nowrap' }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> TAKE ACTION NOW
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 flex-shrink-0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> TAKE ACTION NOW
           </a>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 px-2">
@@ -151,7 +178,9 @@ export const TopStoryBanner = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {[
               {
-                img: `${BASE_PATH}assets/Shampoo1.webp`,
+                img: `${BASE_PATH}assets/solution-no1.webp`,
+                srcSet: `${BASE_PATH}assets/solution-no1-500.webp 500w, ${BASE_PATH}assets/solution-no1.webp 800w`,
+                sizes: '(min-width: 768px) 208px, 160px',
                 label: 'Fulani Hair Gro™ Shampoo 500ml',
                 heading: 'Why Your Hair Needs Our Shampoo',
                 body: [
@@ -161,8 +190,10 @@ export const TopStoryBanner = () => {
                 ],
               },
               {
-                img: `${BASE_PATH}assets/Conditioner2.webp`,
-                label: 'Fulani Hair Gro™ Conditioner',
+                img: `${BASE_PATH}assets/conditioner-no2.webp`,
+                srcSet: `${BASE_PATH}assets/conditioner-no2-500.webp 500w, ${BASE_PATH}assets/conditioner-no2.webp 800w`,
+                sizes: '(min-width: 768px) 208px, 160px',
+                label: 'Fulani Hair Gro™ Conditioner 500ml',
                 heading: 'Why Your Hair Needs Our Conditioner',
                 subheading: 'Hair Doesn\u2019t Stop Growing...',
                 lead: 'It Breaks.',
@@ -172,8 +203,10 @@ export const TopStoryBanner = () => {
                 ],
               },
               {
-                img: `${BASE_PATH}assets/pomade3.webp`,
-                label: 'Fulani Hair Gro™ Hair Pomade',
+                img: `${BASE_PATH}assets/pomade-no3.webp`,
+                srcSet: `${BASE_PATH}assets/pomade-no3-500.webp 500w, ${BASE_PATH}assets/pomade-no3.webp 800w`,
+                sizes: '(min-width: 768px) 208px, 160px',
+                label: 'Fulani Hair Gro™ Hair Pomade 150g',
                 heading: 'Why Your Hair Needs Our Pomade',
                 subheading: 'Hair Needs To Be Fed',
                 body: [
@@ -185,15 +218,21 @@ export const TopStoryBanner = () => {
               },
             ].map((item) => (
               <div key={item.label} className="text-center space-y-3">
-                <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
+                <div
+                  className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md"
+                  style={{ position: 'relative', width: '160px', height: '160px', overflow: 'hidden' }}
+                >
                   <img
                     src={item.img}
+                    srcSet={item.srcSet}
+                    sizes={item.sizes}
                     alt={item.label}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
-                    width="208"
-                    height="208"
+                    width="800"
+                    height="800"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
                 <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
@@ -599,37 +638,21 @@ export const TopStoryBanner = () => {
             </div>
 
             {/* Write A Review Button */}
-            <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
-              <DialogTrigger asChild>
+            <Suspense fallback={null}>
+              <ReviewDialog>
                 <button
                   data-review-trigger
                   className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform"
                 >
                   Write A Review
                 </button>
-              </DialogTrigger>
-              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="text-2xl font-light text-left">Share your thoughts</DialogTitle>
-                  <DialogDescription className="text-left">* required fields</DialogDescription>
-                </DialogHeader>
-
-                {reviewDialogOpen && (
-                  <Suspense fallback={null}>
-                    <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
-                  </Suspense>
-                )}
-              </DialogContent>
-            </Dialog>
+              </ReviewDialog>
+            </Suspense>
 
             </div>
 
             {/* Approved Reviews from Supabase */}
-            {afterHero && (
-              <Suspense fallback={null}>
-                <ReviewsList />
-              </Suspense>
-            )}
+            <LazyReviews />
         </div>
 
         {/* ORDER FORM */}
@@ -1310,13 +1333,15 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LiteYouTubeEmbed
-                  id="myJDa7s6O5w"
-                  title="Fulani Hair Gro Results Video"
-                  thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
-                  webp
-                  lazyLoad
-                />
+                {afterHero && (
+                  <Suspense fallback={null}>
+                    <LiteYouTubePlayer
+                      id="myJDa7s6O5w"
+                      title="Fulani Hair Gro Results Video"
+                      thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
+                    />
+                  </Suspense>
+                )}
               </div>
               <h3 style={{
                 fontFamily: 'Montserrat, sans-serif',
@@ -1355,13 +1380,15 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LiteYouTubeEmbed
-                  id="xJ4vGH2i48g"
-                  title="Fulani Hair Gro Customer Testimonial"
-                  thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
-                  lazyLoad
-                  webp
-                />
+                {afterHero && (
+                  <Suspense fallback={null}>
+                    <LiteYouTubePlayer
+                      id="xJ4vGH2i48g"
+                      title="Fulani Hair Gro Customer Testimonial"
+                      thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
+                    />
+                  </Suspense>
+                )}
               </div>
               <h3 style={{
                 fontFamily: 'Montserrat, sans-serif',
@@ -1400,13 +1427,15 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LiteYouTubeEmbed
-                  id="LNkhqS3-Kxo"
-                  title="Fulani Hair Gro Before and After"
-                  thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
-                  webp
-                  lazyLoad
-                />
+                {afterHero && (
+                  <Suspense fallback={null}>
+                    <LiteYouTubePlayer
+                      id="LNkhqS3-Kxo"
+                      title="Fulani Hair Gro Before and After"
+                      thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
+                    />
+                  </Suspense>
+                )}
               </div>
               <h3 style={{
                 fontFamily: 'Montserrat, sans-serif',

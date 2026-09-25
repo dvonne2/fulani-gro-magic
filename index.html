@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preload" as="image" href="/assets/newhero-665.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/newhero-665.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high" />
     <link rel="preload" as="image" href="/assets/newhero.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
     <title>Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO | #1 Hair Growth Solution in Nigeria | Est. 1625</title>
     <meta name="description" content="Trusted by thousands of women who successfully regrew their hair edges with FULANI HAIR GRO. Nigeria's #1 rated hair growth system delivers real results. 400-year-old Fulani secret. 100,000+ satisfied customers. Pay on Delivery available." />
     <meta name="author" content="Fulani Hair Gro™" />
@@ -24,8 +25,6 @@
 
     <link rel="icon" type="image/webp" href="/assets/favicon.webp" />
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
-
-    <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Critical above-the-fold CSS (urgency banner + hero) -->
     <style>
@@ -52,6 +51,52 @@
       .animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
       @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
     </style>
+
+    <!--
+      Meta Pixel bootstrap: fires the browser PageView from <head> so it does NOT
+      depend on the React bundle loading/hydrating. fbevents.js loads async (never
+      blocks HTML parsing). Integrates with vitalvida-meta-tracking:
+      - script id "vitalvida-fbevents" is the id its loadPixel() looks for
+      - visitor id uses the same localStorage key ("__vv_visitor_id") and format
+      - event id matches the package/CAPI-required format: pv_ + 16 hex chars
+      - window.__vvInitializedPixelIds is pre-populated so the package never
+        re-inits the pixel or fires a duplicate browser PageView
+      The app later sends the CAPI PageView reusing window.__vvPageViewEventId,
+      so Meta deduplicates browser + server into one event.
+    -->
+    <script>
+      (function () {
+        var PIXEL_ID = '220381209723501';
+        if (!window.fbq) {
+          var n = (window.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          });
+          if (!window._fbq) window._fbq = n;
+          n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+          var t = document.createElement('script');
+          t.async = true;
+          t.id = 'vitalvida-fbevents';
+          t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+          document.head.appendChild(t);
+        }
+        var vid = '';
+        try { vid = localStorage.getItem('__vv_visitor_id') || ''; } catch (e) {}
+        if (!vid) {
+          vid = Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+          try { localStorage.setItem('__vv_visitor_id', vid); } catch (e) {}
+        }
+        window.__vvVisitorId = vid;
+        var s = '';
+        for (var i = 0; i < 16; i++) s += Math.floor(Math.random() * 16).toString(16);
+        window.__vvPageViewEventId = 'pv_' + s;
+        fbq('init', PIXEL_ID, { external_id: vid, country: 'ng' });
+        fbq('track', 'PageView', {}, { eventID: window.__vvPageViewEventId });
+        try { window.__vvInitializedPixelIds = new Set([PIXEL_ID]); } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cinzel-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#DAA520" />
@@ -174,6 +219,7 @@
     </style>
 
     <link rel="dns-prefetch" href="https://analytics.tiktok.com">
+    <link rel="preconnect" href="https://analytics.tiktok.com" crossorigin>
 
     <link rel="preload" href="/responsive-fix.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/responsive-fix.css"></noscript>
@@ -200,10 +246,16 @@
           s.async = true;
           document.body.appendChild(s);
         }
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', loadAnalytics);
+        // Defer heavy TikTok SDK until the page has fully loaded, so it does not
+        // compete with the critical above-the-fold render. The ttq stub in the
+        // head queues any events fired before the SDK initializes.
+        function schedule() {
+          setTimeout(loadAnalytics, 1500);
+        }
+        if (document.readyState === 'complete') {
+          schedule();
         } else {
-          loadAnalytics();
+          window.addEventListener('load', schedule, { once: true });
         }
       })();
     </script>

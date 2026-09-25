@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Sparkles,
   Moon,
@@ -23,7 +24,10 @@ const giftItems = [
     sub: '5g',
     text: 'Soothe itching and fight flakes before they build up.',
     icon: Sparkles,
-    image: `${BASE_PATH}assets/sample-itchnomore.png`,
+    image: `${BASE_PATH}assets/sample-itchnomore.webp`,
+    width: 800,
+    height: 800,
+    sizes: '(min-width: 1280px) 240px, (min-width: 768px) 240px, 474px',
   },
   {
     number: '02',
@@ -31,7 +35,10 @@ const giftItems = [
     sub: '1',
     text: 'Protect your strands while you sleep.',
     icon: Moon,
-    image: `${BASE_PATH}assets/bonnet.jpg`,
+    image: `${BASE_PATH}assets/bonnet.webp`,
+    width: 680,
+    height: 680,
+    sizes: '(min-width: 1280px) 240px, (min-width: 768px) 240px, 474px',
   },
   {
     number: '03',
@@ -39,7 +46,10 @@ const giftItems = [
     sub: '1',
     text: 'Glide through knots without snapping your hair.',
     icon: Brush,
-    image: `${BASE_PATH}assets/hairbrush.webp`,
+    image: `${BASE_PATH}assets/hairbrush-optimized.webp`,
+    width: 600,
+    height: 600,
+    sizes: '(min-width: 1280px) 240px, (min-width: 768px) 240px, 474px',
   },
   {
     number: '04',
@@ -47,7 +57,10 @@ const giftItems = [
     sub: '',
     text: 'The 7 Major Things I Did to Grow My Hair 22 Inches + How You Can Too!\nBy H. Nasir — The Fulani Hair Gro',
     icon: BookOpen,
-    image: `${BASE_PATH}assets/book.png`,
+    image: `${BASE_PATH}assets/book.webp`,
+    width: 533,
+    height: 800,
+    sizes: '(min-width: 1280px) 160px, (min-width: 768px) 190px, 350px',
   },
   {
     number: '05',
@@ -55,7 +68,10 @@ const giftItems = [
     sub: '',
     text: 'A simple daily routine you can stick to.',
     icon: BookText,
-    image: `${BASE_PATH}assets/book2.png`,
+    image: `${BASE_PATH}assets/book2.webp`,
+    width: 640,
+    height: 800,
+    sizes: '(min-width: 1280px) 190px, (min-width: 768px) 190px, 420px',
   },
   {
     number: '06',
@@ -63,7 +79,10 @@ const giftItems = [
     sub: '',
     text: 'Direct help while you use your products.',
     icon: MessageCircle,
-    image: `${BASE_PATH}assets/book3.png`,
+    image: `${BASE_PATH}assets/book3.webp`,
+    width: 640,
+    height: 800,
+    sizes: '(min-width: 1280px) 190px, (min-width: 768px) 190px, 420px',
   },
   {
     number: '07',
@@ -71,7 +90,10 @@ const giftItems = [
     sub: '',
     text: 'Try it risk-free for 30 full days.',
     icon: ShieldCheck,
-    image: `${BASE_PATH}assets/book4.png`,
+    image: `${BASE_PATH}assets/book4.webp`,
+    width: 640,
+    height: 800,
+    sizes: '(min-width: 1280px) 190px, (min-width: 768px) 190px, 420px',
   },
 ];
 
@@ -82,33 +104,51 @@ const trustItems = [
   'WhatsApp Support',
 ];
 
-function GiftImage({ src, Icon }: { src: string; Icon: typeof Sparkles }) {
+function GiftImage({
+  src,
+  alt,
+  Icon,
+  width,
+  height,
+  sizes,
+}: {
+  src: string;
+  alt: string;
+  Icon: typeof Sparkles;
+  width: number;
+  height: number;
+  sizes: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const base = src.replace(/\.webp$/i, '');
+  const srcSet = `${base}-500.webp 500w, ${src} ${width}w`;
   return (
     <div
       className="relative w-full h-80 md:h-60 mx-auto mb-4 rounded-2xl flex items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}` }}
+      style={{ backgroundColor: '#fffbeb', border: `2px solid ${gold}`, position: 'relative', height: '320px' }}
     >
-      <img
-        src={src}
-        alt=""
-        className="absolute inset-0 w-full h-full object-contain p-2 hidden gift-img"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).style.display = 'none';
-          const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
-          if (fallback) fallback.style.display = 'flex';
-        }}
-        onLoad={(e) => {
-          (e.currentTarget as HTMLImageElement).classList.remove('hidden');
-          const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
-          if (fallback) fallback.style.display = 'none';
-        }}
-      />
-      <span
-        className="w-full h-full flex items-center justify-center gift-fallback"
-        style={{ color: green }}
-      >
-        <Icon className="w-20 h-20 md:w-24 md:h-24" strokeWidth={1.5} />
-      </span>
+      {failed ? (
+        <span
+          className="w-full h-full flex items-center justify-center"
+          style={{ color: green }}
+        >
+          <Icon className="w-20 h-20 md:w-24 md:h-24" strokeWidth={1.5} />
+        </span>
+      ) : (
+        <img
+          src={src}
+          srcSet={srcSet}
+          sizes={sizes}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          width={width}
+          height={height}
+          className="absolute inset-0 w-full h-full object-contain p-2"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', padding: '8px' }}
+          onError={() => setFailed(true)}
+        />
+      )}
     </div>
   );
 }
@@ -136,7 +176,14 @@ function GiftCard({
         >
           {gift.number}
         </span>
-        <GiftImage src={gift.image} Icon={Icon} />
+        <GiftImage
+          src={gift.image}
+          alt={gift.title}
+          Icon={Icon}
+          width={gift.width}
+          height={gift.height}
+          sizes={gift.sizes}
+        />
         <h4
           className="font-black text-lg md:text-base leading-tight mb-1"
           style={{ color: green }}

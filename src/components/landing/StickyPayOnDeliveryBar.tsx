@@ -11,9 +11,10 @@ export function StickyPayOnDeliveryBar() {
       onClick={scrollToForm}
       type="button"
       className="sticky top-0 z-50 w-full bg-red-600 px-3 py-2 text-center text-white shadow-md transition-colors hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-inset md:py-3"
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '40px', width: '100%', backgroundColor: '#dc2626', color: '#fff' }}
       aria-label="Buy now with pay on delivery nationwide delivery"
     >
-      <span className="inline-flex w-full items-center justify-center gap-1 text-xs font-bold uppercase tracking-wide md:gap-3 md:text-base">
+      <span className="inline-flex w-full items-center justify-center gap-1 text-xs font-bold uppercase tracking-wide md:gap-3 md:text-base" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
         <span>Buy Now</span>
         <span className="hidden font-normal opacity-80 md:inline" aria-hidden="true">|</span>
         <span className="hidden md:inline">Pay On Delivery</span>
