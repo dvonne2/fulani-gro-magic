@@ -12,6 +12,13 @@ const BASE_PATH = import.meta.env.BASE_URL || '/';
 // design; selecting it sets exactly the same slug as the plain card did.
 const BEST_VALUE_PKG = PACKAGES.find(p => p.id === 'PKG-004');
 
+// Display-only package designs for the secondary pictorial cards (PKG-004 keeps its own hero design above).
+const PKG_DESIGN_IMAGES: Record<string, { file: string; alt: string }> = {
+  'PKG-001': { file: 'fhg-self-love-plus-35750', alt: 'Self Love Plus — 1 Heritage Shampoo, 1 Growth Pomade, 1 Voluminous Conditioner for ₦35,750' },
+  'PKG-002': { file: 'fhg-self-love-return-45750', alt: 'Self Love Return — 3 Growth Pomades (150ml each) for ₦45,750' },
+  'PKG-005': { file: 'fhg-family-saves-218750', alt: 'Family Saves — 10 shampoos, 10 pomades, 10 conditioners for ₦218,750' },
+};
+
 const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim().toLowerCase());
 const isValidPhone = (value: string) => {
   const digits = value.replace(/\D/g, '');
@@ -514,6 +521,25 @@ function OrderFormEmbed() {
             @media (max-width: 640px) {
               .fhg-bv-card { width: calc(100vw - 64px) !important; margin-left: calc(50% - 50vw + 32px) !important; }
             }
+            .fhg-mini-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
+            .fhg-mini-card { display: flex; flex-direction: column; min-width: 0; border: 2px solid #e5e7eb; border-radius: 10px; overflow: hidden; cursor: pointer; background: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+            .fhg-mini-card.is-selected { border-color: #059669; background: #ecfdf5; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18); }
+            .fhg-mini-media { display: block; flex-shrink: 0; background: #fff; }
+            .fhg-mini-media img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; }
+            .fhg-mini-body { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px 10px; min-width: 0; }
+            .fhg-mini-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+            .fhg-mini-name { font-size: 14px; font-weight: 700; color: #111; line-height: 1.25; min-width: 0; }
+            .fhg-mini-items { font-size: 12px; color: #6b7280; line-height: 1.35; }
+            .fhg-mini-price { font-size: 16px; font-weight: 800; color: #047857; }
+            .fhg-mini-check { align-self: flex-start; margin-top: 2px; font-size: 11px; font-weight: 700; color: #fff; background: #059669; padding: 2px 8px; border-radius: 999px; }
+            @media (max-width: 640px) {
+              .fhg-mini-grid { grid-template-columns: 1fr; width: calc(100vw - 64px); margin-left: calc(50% - 50vw + 32px); }
+              .fhg-mini-card { flex-direction: row; align-items: center; }
+              .fhg-mini-media { width: 48%; }
+              .fhg-mini-body { flex: 1; padding: 10px 12px; }
+              .fhg-mini-name { font-size: 15px; }
+              .fhg-mini-price { font-size: 17px; }
+            }
           `}</style>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {/* ₦69,750 BEST VALUE design — tapping anywhere selects the existing PKG-004 option */}
@@ -564,142 +590,53 @@ function OrderFormEmbed() {
                 </label>
               );
             })()}
-            {PACKAGES.filter(pkg => pkg.id !== 'PKG-004').map((pkg) => {
-              const isSelected = form.package === pkg.slug;
-              const displayName = pkg.displayName || pkg.name;
-              return (
-                <label
-                  key={pkg.slug}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '10px',
-                    padding: '12px',
-                    border: pkg.highlight
-                      ? '2px solid #2563eb'
-                      : `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: pkg.highlight ? '#eaf0fd' : (isSelected ? '#f0f8ff' : '#fff'),
-                    transition: 'all 0.2s ease',
-                    minWidth: 0,
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="package"
-                    value={pkg.slug}
-                    checked={isSelected}
-                    onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                    style={{ cursor: 'pointer', marginTop: '3px', flexShrink: 0 }}
-                  />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    {pkg.highlight ? (
-                      <div>
-                        {pkg.badges && pkg.badges.length > 0 && (
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
-                            {pkg.badges.map(badge => (
-                              <span
-                                key={badge.text}
-                                style={{
-                                  fontSize: '11px',
-                                  fontWeight: 700,
-                                  padding: '3px 8px',
-                                  borderRadius: '999px',
-                                  whiteSpace: 'nowrap',
-                                  color: badge.tone === 'success' ? '#065f46' : badge.tone === 'accent' ? '#fff' : '#1d4ed8',
-                                  backgroundColor: badge.tone === 'success' ? '#bbf7d0' : badge.tone === 'accent' ? '#d82726' : '#dbe6fe',
-                                }}
-                              >
-                                {badge.text}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        <div style={{ fontSize: '17px', fontWeight: 800, color: '#111', lineHeight: 1.3 }}>
-                          {displayName}
-                        </div>
-                        {pkg.offerBullets && pkg.offerBullets.length > 0 && (
-                          <ul style={{ margin: '8px 0 0', paddingLeft: '20px', listStyle: 'disc outside', color: '#374151', fontSize: '13px', lineHeight: 1.6 }}>
-                            {pkg.offerBullets.map(bullet => (
-                              <li key={bullet}>{bullet}</li>
-                            ))}
-                          </ul>
-                        )}
-                        {pkg.valueBreakdown && pkg.valueBreakdown.length > 0 && (
-                          <div style={{
-                            marginTop: '10px',
-                            padding: '10px 12px',
-                            backgroundColor: '#fff',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '4px',
-                          }}>
-                            {pkg.valueBreakdown.map(row => (
-                              <div
-                                key={row.label}
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'baseline',
-                                  gap: '10px',
-                                  fontSize: '13px',
-                                  color: '#111',
-                                  fontWeight: row.strong ? 700 : 400,
-                                }}
-                              >
-                                <span style={{ minWidth: 0 }}>{row.label}</span>
-                                <span style={{ whiteSpace: 'nowrap' }}>₦{row.amount.toLocaleString('en-NG')}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'baseline', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
-                          {pkg.referencePrice && (
-                            <span style={{ fontSize: '13px', color: '#9ca3af', textDecoration: 'line-through', whiteSpace: 'nowrap' }}>
-                              ₦{pkg.referencePrice.toLocaleString('en-NG')}
-                            </span>
-                          )}
-                          <span style={{ fontSize: '24px', fontWeight: 800, color: '#047857', whiteSpace: 'nowrap' }}>
-                            ₦{pkg.price.toLocaleString('en-NG')}
-                          </span>
-                        </div>
-                        {pkg.tagline && (
-                          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
-                            {pkg.tagline}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                        <div style={{ minWidth: 0 }}>
-                          <div style={{ fontSize: '15px', fontWeight: 700, color: '#111' }}>
-                            {displayName}
-                          </div>
-                          <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
-                            {pkg.itemsLabel || pkg.items}
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', flexShrink: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontSize: '12px', color: '#9ca3af', textDecoration: 'line-through' }}>
-                              ₦{pkg.originalPrice.toLocaleString('en-NG')}
-                            </span>
-                            <span style={{ fontSize: '10px', fontWeight: 700, color: '#1d4ed8', backgroundColor: '#dbe6fe', padding: '2px 6px', borderRadius: '999px' }}>
-                              {pkg.discount}% OFF
-                            </span>
-                          </div>
-                          <span style={{ fontSize: '18px', fontWeight: 800, color: '#047857' }}>
-                            ₦{pkg.price.toLocaleString('en-NG')}
-                          </span>
-                        </div>
-                      </div>
+            {/* Secondary pictorial options — deliberately smaller and quieter than the ₦69,750 hero.
+                Each card is a real <label> wrapping the existing radio, so tapping anywhere selects that package. */}
+            <div className="fhg-mini-grid">
+              {PACKAGES.filter(pkg => pkg.id !== 'PKG-004').map((pkg) => {
+                const isSelected = form.package === pkg.slug;
+                const displayName = pkg.displayName || pkg.name;
+                const design = PKG_DESIGN_IMAGES[pkg.id];
+                return (
+                  <label
+                    key={pkg.slug}
+                    className={`fhg-mini-card${isSelected ? ' is-selected' : ''}`}
+                    data-pkg-id={pkg.id}
+                  >
+                    {design && (
+                      <span className="fhg-mini-media">
+                        <img
+                          src={`${BASE_PATH}images/${design.file}-720.webp`}
+                          srcSet={`${BASE_PATH}images/${design.file}-480.webp 480w, ${BASE_PATH}images/${design.file}-720.webp 720w, ${BASE_PATH}images/${design.file}.webp 1254w`}
+                          sizes="(max-width: 640px) 50vw, 190px"
+                          alt={design.alt}
+                          width="1254"
+                          height="1254"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
                     )}
-                  </div>
-                </label>
-              );
-            })}
+                    <span className="fhg-mini-body">
+                      <span className="fhg-mini-row">
+                        <input
+                          type="radio"
+                          name="package"
+                          value={pkg.slug}
+                          checked={isSelected}
+                          onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
+                          style={{ cursor: 'pointer', width: '18px', height: '18px', margin: 0, flexShrink: 0 }}
+                        />
+                        <span className="fhg-mini-name">{displayName}</span>
+                      </span>
+                      <span className="fhg-mini-items">{pkg.itemsLabel || pkg.items}</span>
+                      <span className="fhg-mini-price">₦{pkg.price.toLocaleString('en-NG')}</span>
+                      {isSelected && <span className="fhg-mini-check">✓ Selected</span>}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
         </div>
 
