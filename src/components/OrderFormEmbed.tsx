@@ -8,6 +8,10 @@ import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
+// The existing live ₦69,750 package (PKG-004). Rendered as the BEST VALUE
+// design; selecting it sets exactly the same slug as the plain card did.
+const BEST_VALUE_PKG = PACKAGES.find(p => p.id === 'PKG-004');
+
 const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim().toLowerCase());
 const isValidPhone = (value: string) => {
   const digits = value.replace(/\D/g, '');
@@ -500,175 +504,67 @@ function OrderFormEmbed() {
       </h2>
       
       <div style={{ background: '#fff', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', border: '3px solid #d82726', textAlign: 'left' }}>
-        {/* Your Name */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Name
-          </label>
-          <input
-            type="text"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px'
-            }}
-            placeholder="e.g. Chidinma Okafor"
-            value={form.name}
-            onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-          />
-        </div>
-
-        {/* Your Phone Number */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Phone Number
-          </label>
-          <input
-            type="tel"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px'
-            }}
-            placeholder="e.g. 08012345678"
-            value={form.phone}
-            onChange={e => setForm(prev => ({ ...prev, phone: e.target.value }))}
-          />
-        </div>
-
-        {/* Your WhatsApp Number */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your WhatsApp Number *
-          </label>
-          <input
-            type="tel"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px'
-            }}
-            placeholder="e.g. 08012345678"
-            value={form.whatsapp}
-            onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
-            required
-          />
-        </div>
-
-        {/* Your Email Address */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Email Address *
-          </label>
-          <input
-            type="email"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px'
-            }}
-            placeholder="e.g. yourname@gmail.com"
-            value={form.email}
-            onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
-            required
-          />
-        </div>
-
-        {/* Your Home/Office Address */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Home/Office Address
-          </label>
-          <textarea
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px',
-              minHeight: '80px',
-              resize: 'vertical'
-            }}
-            placeholder="House number, street, area, city"
-            value={form.address}
-            onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
-          />
-        </div>
-
-        {/* Your Delivery State */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Delivery State
-          </label>
-          <select
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px',
-              backgroundColor: '#fff'
-            }}
-            value={form.state}
-            onChange={e => setForm(prev => ({ ...prev, state: e.target.value }))}
-            aria-label="Select your state"
-          >
-            <option value="">Select your state</option>
-            <option value="Abia">Abia</option>
-            <option value="Adamawa">Adamawa</option>
-            <option value="Akwa Ibom">Akwa Ibom</option>
-            <option value="Anambra">Anambra</option>
-            <option value="Bauchi">Bauchi</option>
-            <option value="Bayelsa">Bayelsa</option>
-            <option value="Benue">Benue</option>
-            <option value="Borno">Borno</option>
-            <option value="Cross River">Cross River</option>
-            <option value="Delta">Delta</option>
-            <option value="Ebonyi">Ebonyi</option>
-            <option value="Edo">Edo</option>
-            <option value="Ekiti">Ekiti</option>
-            <option value="Enugu">Enugu</option>
-            <option value="FCT">FCT - Abuja</option>
-            <option value="Gombe">Gombe</option>
-            <option value="Imo">Imo</option>
-            <option value="Jigawa">Jigawa</option>
-            <option value="Kaduna">Kaduna</option>
-            <option value="Kano">Kano</option>
-            <option value="Katsina">Katsina</option>
-            <option value="Kebbi">Kebbi</option>
-            <option value="Kogi">Kogi</option>
-            <option value="Kwara">Kwara</option>
-            <option value="Lagos">Lagos</option>
-            <option value="Nasarawa">Nasarawa</option>
-            <option value="Niger">Niger</option>
-            <option value="Ogun">Ogun</option>
-            <option value="Ondo">Ondo</option>
-            <option value="Osun">Osun</option>
-            <option value="Oyo">Oyo</option>
-            <option value="Plateau">Plateau</option>
-            <option value="Rivers">Rivers</option>
-            <option value="Sokoto">Sokoto</option>
-            <option value="Taraba">Taraba</option>
-            <option value="Yobe">Yobe</option>
-            <option value="Zamfara">Zamfara</option>
-          </select>
-        </div>
-
         {/* Select Your Package */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '12px', fontWeight: '600', color: '#333' }}>
             Select Your Product
           </label>
+          {/* On phones, let the ₦69,750 card break out of the nested form padding so the design stays large and readable */}
+          <style>{`
+            @media (max-width: 640px) {
+              .fhg-bv-card { width: calc(100vw - 64px) !important; margin-left: calc(50% - 50vw + 32px) !important; }
+            }
+          `}</style>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {PACKAGES.map((pkg) => {
+            {/* ₦69,750 BEST VALUE design — tapping anywhere selects the existing PKG-004 option */}
+            {BEST_VALUE_PKG && (() => {
+              const isSelected = form.package === BEST_VALUE_PKG.slug;
+              return (
+                <label
+                  key={BEST_VALUE_PKG.slug}
+                  className="fhg-bv-card"
+                  style={{
+                    display: 'block',
+                    border: `3px solid ${isSelected ? '#d82726' : '#ddd'}`,
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+                    boxShadow: isSelected ? '0 4px 14px rgba(216, 39, 38, 0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px' }}>
+                    <input
+                      type="radio"
+                      name="package"
+                      value={BEST_VALUE_PKG.slug}
+                      checked={isSelected}
+                      onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
+                      style={{ cursor: 'pointer', width: '20px', height: '20px', flexShrink: 0 }}
+                    />
+                    <span style={{ flex: 1, fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                      {isSelected ? '✓ Selected: ' : 'Tap to select: '}{BEST_VALUE_PKG.name}
+                    </span>
+                    <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669', whiteSpace: 'nowrap' }}>
+                      ₦{BEST_VALUE_PKG.price.toLocaleString('en-NG')}
+                    </span>
+                  </div>
+                  <img
+                    src={`${BASE_PATH}images/fhg-69750-best-value.webp`}
+                    srcSet={`${BASE_PATH}images/fhg-69750-best-value-720.webp 720w, ${BASE_PATH}images/fhg-69750-best-value.webp 1254w`}
+                    sizes="(max-width: 600px) 100vw, 560px"
+                    alt="Best Value: Buy 2 complete sets, get 1 complete set free — 3 shampoos, 3 conditioners, 3 pomades for ₦69,750"
+                    width="1254"
+                    height="1254"
+                    loading="lazy"
+                    decoding="async"
+                    style={{ display: 'block', width: '100%', height: 'auto' }}
+                  />
+                </label>
+              );
+            })()}
+            {PACKAGES.filter(pkg => pkg.id !== 'PKG-004').map((pkg) => {
               const isSelected = form.package === pkg.slug;
               const displayName = pkg.displayName || pkg.name;
               return (
@@ -828,6 +724,168 @@ function OrderFormEmbed() {
             {[1,2,3,4,5,6,7,8,9,10].map(n => (
               <option key={n} value={String(n)}>{n}</option>
             ))}
+          </select>
+        </div>
+
+        {/* Your Name */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your Name
+          </label>
+          <input
+            type="text"
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px'
+            }}
+            placeholder="e.g. Chidinma Okafor"
+            value={form.name}
+            onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+          />
+        </div>
+
+        {/* Your Phone Number */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your Phone Number
+          </label>
+          <input
+            type="tel"
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px'
+            }}
+            placeholder="e.g. 08012345678"
+            value={form.phone}
+            onChange={e => setForm(prev => ({ ...prev, phone: e.target.value }))}
+          />
+        </div>
+
+        {/* Your Email Address */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your Email Address *
+          </label>
+          <input
+            type="email"
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px'
+            }}
+            placeholder="e.g. yourname@gmail.com"
+            value={form.email}
+            onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+            required
+          />
+        </div>
+
+        {/* Your WhatsApp Number */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your WhatsApp Number *
+          </label>
+          <input
+            type="tel"
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px'
+            }}
+            placeholder="e.g. 08012345678"
+            value={form.whatsapp}
+            onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
+            required
+          />
+        </div>
+
+        {/* Your Home/Office Address */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your Home/Office Address
+          </label>
+          <textarea
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px',
+              minHeight: '80px',
+              resize: 'vertical'
+            }}
+            placeholder="House number, street, area, city"
+            value={form.address}
+            onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
+          />
+        </div>
+
+        {/* Your Delivery State */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your Delivery State
+          </label>
+          <select
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px',
+              backgroundColor: '#fff'
+            }}
+            value={form.state}
+            onChange={e => setForm(prev => ({ ...prev, state: e.target.value }))}
+            aria-label="Select your state"
+          >
+            <option value="">Select your state</option>
+            <option value="Abia">Abia</option>
+            <option value="Adamawa">Adamawa</option>
+            <option value="Akwa Ibom">Akwa Ibom</option>
+            <option value="Anambra">Anambra</option>
+            <option value="Bauchi">Bauchi</option>
+            <option value="Bayelsa">Bayelsa</option>
+            <option value="Benue">Benue</option>
+            <option value="Borno">Borno</option>
+            <option value="Cross River">Cross River</option>
+            <option value="Delta">Delta</option>
+            <option value="Ebonyi">Ebonyi</option>
+            <option value="Edo">Edo</option>
+            <option value="Ekiti">Ekiti</option>
+            <option value="Enugu">Enugu</option>
+            <option value="FCT">FCT - Abuja</option>
+            <option value="Gombe">Gombe</option>
+            <option value="Imo">Imo</option>
+            <option value="Jigawa">Jigawa</option>
+            <option value="Kaduna">Kaduna</option>
+            <option value="Kano">Kano</option>
+            <option value="Katsina">Katsina</option>
+            <option value="Kebbi">Kebbi</option>
+            <option value="Kogi">Kogi</option>
+            <option value="Kwara">Kwara</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Nasarawa">Nasarawa</option>
+            <option value="Niger">Niger</option>
+            <option value="Ogun">Ogun</option>
+            <option value="Ondo">Ondo</option>
+            <option value="Osun">Osun</option>
+            <option value="Oyo">Oyo</option>
+            <option value="Plateau">Plateau</option>
+            <option value="Rivers">Rivers</option>
+            <option value="Sokoto">Sokoto</option>
+            <option value="Taraba">Taraba</option>
+            <option value="Yobe">Yobe</option>
+            <option value="Zamfara">Zamfara</option>
           </select>
         </div>
 
