@@ -551,8 +551,8 @@ function OrderFormEmbed() {
                     </span>
                   </div>
                   <img
-                    src={`${BASE_PATH}images/fhg-69750-best-value.webp`}
-                    srcSet={`${BASE_PATH}images/fhg-69750-best-value-720.webp 720w, ${BASE_PATH}images/fhg-69750-best-value.webp 1254w`}
+                    src={`${BASE_PATH}images/fhg-69750-best-value-v2.webp`}
+                    srcSet={`${BASE_PATH}images/fhg-69750-best-value-v2-720.webp 720w, ${BASE_PATH}images/fhg-69750-best-value-v2.webp 1254w`}
                     sizes="(max-width: 600px) 100vw, 560px"
                     alt="Best Value: Buy 2 complete sets, get 1 complete set free — 3 shampoos, 3 conditioners, 3 pomades for ₦69,750"
                     width="1254"
