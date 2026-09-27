@@ -8,6 +8,9 @@ import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
+// Existing ₦69,750 package (PKG-004) shown as the lead image card in the form.
+const BEST_VALUE_PKG = PACKAGES.find(p => p.id === 'PKG-004');
+
 const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim().toLowerCase());
 const isValidPhone = (value: string) => {
   const digits = value.replace(/\D/g, '');
@@ -501,6 +504,124 @@ function OrderFormEmbed() {
       </h2>
       
       <div style={{ background: '#fff', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', border: '3px solid #d82726', textAlign: 'left' }}>
+        {/* Select Your Package */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '12px', fontWeight: '600', color: '#333' }}>
+            Select Your Product
+          </label>
+          {/* On phones, let the ₦69,750 card break out of the nested form padding so the design stays large and readable */}
+          <style>{`
+            @media (max-width: 640px) {
+              .fhg-bv-card { width: calc(100vw - 64px) !important; margin-left: calc(50% - 50vw + 32px) !important; }
+            }
+          `}</style>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* ₦69,750 BEST VALUE design — tapping anywhere selects the existing PKG-004 option */}
+            {BEST_VALUE_PKG && (() => {
+              const isSelected = form.package === BEST_VALUE_PKG.slug;
+              return (
+                <label
+                  key={BEST_VALUE_PKG.slug}
+                  className="fhg-bv-card"
+                  style={{
+                    display: 'block',
+                    border: `3px solid ${isSelected ? '#d82726' : '#ddd'}`,
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+                    boxShadow: isSelected ? '0 4px 14px rgba(216, 39, 38, 0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px' }}>
+                    <input
+                      type="radio"
+                      name="package"
+                      value={BEST_VALUE_PKG.slug}
+                      checked={isSelected}
+                      onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
+                      style={{ cursor: 'pointer', width: '20px', height: '20px', flexShrink: 0 }}
+                    />
+                    <span style={{ flex: 1, fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                      {isSelected ? '✓ Selected: ' : 'Tap to select: '}{BEST_VALUE_PKG.name}
+                    </span>
+                    <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669', whiteSpace: 'nowrap' }}>
+                      ₦{BEST_VALUE_PKG.price.toLocaleString('en-NG')}
+                    </span>
+                  </div>
+                  <img
+                    src={`${BASE_PATH}images/fhg-69750-best-value.webp`}
+                    srcSet={`${BASE_PATH}images/fhg-69750-best-value-720.webp 720w, ${BASE_PATH}images/fhg-69750-best-value.webp 1254w`}
+                    sizes="(max-width: 600px) 100vw, 560px"
+                    alt="Best Value: Buy 2 complete sets, get 1 complete set free — 3 shampoos, 3 conditioners, 3 pomades for ₦69,750"
+                    width="1254"
+                    height="1254"
+                    loading="lazy"
+                    decoding="async"
+                    style={{ display: 'block', width: '100%', height: 'auto' }}
+                  />
+                </label>
+              );
+            })()}
+            {PACKAGES.filter(pkg => pkg.slug !== BEST_VALUE_PKG?.slug).map((pkg) => {
+              const isSelected = form.package === pkg.slug;
+              return (
+                <label
+                  key={pkg.slug}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    padding: '12px',
+                    border: `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="package"
+                    value={pkg.slug}
+                    checked={isSelected}
+                    onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
+                    style={{ cursor: 'pointer', marginTop: '3px' }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                        {pkg.name}
+                        {pkg.label && (
+                          <span style={{
+                            marginLeft: '8px',
+                            fontSize: '10px',
+                            fontWeight: '700',
+                            color: '#fff',
+                            backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            textTransform: 'uppercase',
+                          }}>
+                            {pkg.label}
+                          </span>
+                        )}
+                      </span>
+                      <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
+                        ₦{pkg.price.toLocaleString('en-NG')}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                      {pkg.items} · + delivery fee (select below)
+                    </div>
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Your Name */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
@@ -541,27 +662,6 @@ function OrderFormEmbed() {
           />
         </div>
 
-        {/* Your WhatsApp Number */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your WhatsApp Number *
-          </label>
-          <input
-            type="tel"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              fontSize: '16px'
-            }}
-            placeholder="e.g. 08012345678"
-            value={form.whatsapp}
-            onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
-            required
-          />
-        </div>
-
         {/* Your Email Address */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
@@ -579,6 +679,27 @@ function OrderFormEmbed() {
             placeholder="e.g. yourname@gmail.com"
             value={form.email}
             onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+            required
+          />
+        </div>
+
+        {/* Your WhatsApp Number */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Your WhatsApp Number *
+          </label>
+          <input
+            type="tel"
+            style={{ 
+              width: '100%', 
+              padding: '12px', 
+              border: '1px solid #ddd', 
+              borderRadius: '6px',
+              fontSize: '16px'
+            }}
+            placeholder="e.g. 08012345678"
+            value={form.whatsapp}
+            onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
             required
           />
         </div>
@@ -661,70 +782,6 @@ function OrderFormEmbed() {
             <option value="Yobe">Yobe</option>
             <option value="Zamfara">Zamfara</option>
           </select>
-        </div>
-
-        {/* Select Your Package */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', marginBottom: '12px', fontWeight: '600', color: '#333' }}>
-            Select Your Product
-          </label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {PACKAGES.map((pkg) => {
-              const isSelected = form.package === pkg.slug;
-              return (
-                <label
-                  key={pkg.slug}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '10px',
-                    padding: '12px',
-                    border: `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="package"
-                    value={pkg.slug}
-                    checked={isSelected}
-                    onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                    style={{ cursor: 'pointer', marginTop: '3px' }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
-                        {pkg.name}
-                        {pkg.label && (
-                          <span style={{
-                            marginLeft: '8px',
-                            fontSize: '10px',
-                            fontWeight: '700',
-                            color: '#fff',
-                            backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
-                            padding: '2px 6px',
-                            borderRadius: '4px',
-                            textTransform: 'uppercase',
-                          }}>
-                            {pkg.label}
-                          </span>
-                        )}
-                      </span>
-                      <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
-                        ₦{pkg.price.toLocaleString('en-NG')}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                      {pkg.items} · + delivery fee (select below)
-                    </div>
-                  </div>
-                </label>
-              );
-            })}
-          </div>
         </div>
 
         {/* Delivery Fee Selection */}
